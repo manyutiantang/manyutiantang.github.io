@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>主播薪资推导图</title>
+<link rel="icon" type="image/png" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -137,6 +138,12 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .days div b{font-family:var(--font-num);font-size:16px}
 .note{color:var(--muted);font-size:13px}
 
+.brand{display:flex;align-items:center;gap:14px;background:#000;border-radius:12px;padding:10px 18px 10px 12px;position:relative;overflow:hidden}
+.brand::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#F04FD0,#8B5CF6 50%,#22D3EE)}
+.brand img{width:52px;height:52px;flex:none;border-radius:50%}
+.brand p{color:#fff;font-size:17px;font-weight:500;line-height:1.35;letter-spacing:.01em;text-wrap:balance}
+.brand p b{font-weight:700;background:linear-gradient(90deg,#F772DB,#A78BFA 55%,#5EE0F5);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (max-width:480px){.brand p{font-size:15px}.brand img{width:44px;height:44px}}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 .lang{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel);flex:none}
 .lang a,.lang span{padding:6px 16px;font-size:14px;font-weight:500;text-decoration:none;color:var(--muted)}
@@ -149,6 +156,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 </head>
 <body>
 <div class="wrap">
+  <div class="brand"><img src="../logo.png" alt="Avery Media" width="52" height="52"><p lang="en"><b>Avery Media</b>, where hard work and ambition pay off.</p></div>
   <header class="top">
     <div><h1>主播薪资推导图</h1>
     <p class="lede">工资每半个月结算一次。先选结算场景，再按主播的实际情况一步一步选，右侧直接给出底薪。下方的整张导图会同步标出你走过的路径，也可以直接点导图上的任意一格。金额单位是菲律宾比索（₱），钻石以K计（80K = 80,000钻石）。</p></div>

@@ -4,11 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Host Salary Guide</title>
+<link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-/* layout: scenario tabs, stepper + result card, linked full map, reference tables */
+/* 布局思路：上方三选一的结算场景 → 左侧逐步选择、右侧结果卡 → 下方整张导图（与选择联动）→ 参考表 */
 :root{
   --bg:#F3F5F8; --panel:#FFFFFF; --ink:#15202B; --muted:#5C6B7A; --line:#D5DCE4;
   --accent:#2347D3; --accent-soft:#E6EBFC;
@@ -137,6 +138,12 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .days div b{font-family:var(--font-num);font-size:16px}
 .note{color:var(--muted);font-size:13px}
 
+.brand{display:flex;align-items:center;gap:14px;background:#000;border-radius:12px;padding:10px 18px 10px 12px;position:relative;overflow:hidden}
+.brand::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#F04FD0,#8B5CF6 50%,#22D3EE)}
+.brand img{width:52px;height:52px;flex:none;border-radius:50%}
+.brand p{color:#fff;font-size:17px;font-weight:500;line-height:1.35;letter-spacing:.01em;text-wrap:balance}
+.brand p b{font-weight:700;background:linear-gradient(90deg,#F772DB,#A78BFA 55%,#5EE0F5);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media (max-width:480px){.brand p{font-size:15px}.brand img{width:44px;height:44px}}
 .top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 .lang{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel);flex:none}
 .lang a,.lang span{padding:6px 16px;font-size:14px;font-weight:500;text-decoration:none;color:var(--muted)}
@@ -149,6 +156,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 </head>
 <body>
 <div class="wrap">
+  <div class="brand"><img src="logo.png" alt="Avery Media" width="52" height="52"><p lang="en"><b>Avery Media</b>, where hard work and ambition pay off.</p></div>
   <header class="top">
     <div><h1>Host Salary Guide</h1>
     <p class="lede">Salary is settled every half-month. Pick a scenario, then answer the questions one by one to see the base pay on the right. The full map below highlights your path, and you can click any box on it. Amounts are in Philippine pesos (₱). Diamonds are counted in K (80K = 80,000 diamonds).</p></div>
@@ -285,7 +293,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 const PER = "/day";
 const PCT = "20% commission";
 const NOPAY = "No back pay";
-
+// ---------- 结果 ----------
 const R = {
   new923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["Pay = days streamed × ₱923","No cap: every day streamed is paid"]},
   trial923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["HR decides whether the trial is passed. Attendance is not a requirement","Pay = days streamed × ₱923"]},
@@ -311,7 +319,7 @@ const R = {
   a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 300K tier",rate:1000,lines:["Pay = days streamed × ₱1,000","If the half-month total reaches 300K, ₱13,000+ applies instead"]}
 };
 
-
+// ---------- 三棵树 ----------
 const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
 const dia = isNew => {
   const base = isNew ? R.new923 : R.old755;
@@ -366,7 +374,7 @@ const TREES = {
     start:[0,0,1,1]}
 };
 
-
+// ---------- 状态 ----------
 let cur = "half";
 const paths = {half:[...TREES.half.start], month:[...TREES.month.start], appeal:[...TREES.appeal.start]};
 const $ = id => document.getElementById(id);

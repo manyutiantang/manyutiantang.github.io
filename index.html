@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Host Salary Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* layout: scenario tabs, stepper + result card, linked full map, reference tables */
+:root{
+  --bg:#F3F5F8; --panel:#FFFFFF; --ink:#15202B; --muted:#5C6B7A; --line:#D5DCE4;
+  --accent:#2347D3; --accent-soft:#E6EBFC;
+  --day:#0E7A55; --day-soft:#DDF3EA;
+  --pct:#A85B00; --pct-soft:#FCEBD3;
+  --top:#6A2BC2; --top-soft:#EEE3FB;
+  --none:#56626E; --none-soft:#E7EBEF;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-num:"Barlow Condensed","Noto Sans SC","PingFang SC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
+    --accent:#8FA6FF; --accent-soft:#222E57;
+    --day:#5FD3A6; --day-soft:#153729;
+    --pct:#F2B25C; --pct-soft:#3D2C12;
+    --top:#C29BFF; --top-soft:#2F2148;
+    --none:#A9B4BF; --none-soft:#27313B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
+  --accent:#8FA6FF; --accent-soft:#222E57;
+  --day:#5FD3A6; --day-soft:#153729;
+  --pct:#F2B25C; --pct-soft:#3D2C12;
+  --top:#C29BFF; --top-soft:#2F2148;
+  --none:#A9B4BF; --none-soft:#27313B;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 56px;display:flex;flex-direction:column;gap:24px}
+h1{font-size:28px;line-height:1.25;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:18px;margin:0;font-weight:700}
+p{margin:0}
+.lede{color:var(--muted);max-width:46em;margin-top:6px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:10px}
+.tab{flex:1 1 220px;text-align:left;background:var(--panel);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.tab b{display:block;font-size:16px}
+.tab span{color:var(--muted);font-size:13px}
+.tab[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.tab[aria-selected="true"] b{color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.work{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.work{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.steps{display:flex;flex-direction:column;gap:18px}
+.step{display:flex;flex-direction:column;gap:8px}
+.step .qrow{display:flex;gap:10px;align-items:baseline}
+.step .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--panel);font-size:13px;display:grid;place-items:center;font-weight:700}
+.step .q{font-weight:700;font-size:16px}
+.step .hint{color:var(--muted);font-size:13px;padding-left:34px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:34px}
+.opt{background:var(--panel);border:1.5px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--ink);font:inherit;text-align:left;min-width:108px}
+.opt small{display:block;color:var(--muted);font-size:12px}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+:root[data-theme="dark"] .opt[aria-pressed="true"]{color:#10161D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .opt[aria-pressed="true"]{color:#10161D}}
+.opt[aria-pressed="true"] small{color:inherit;opacity:.85}
+.reset{align-self:flex-start;background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;padding:4px 0;text-decoration:underline}
+
+.result{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px;border-width:2px}
+.result .tag{font-size:13px;color:var(--muted)}
+.result .big{font-family:var(--font-num);font-size:52px;line-height:1.05;font-weight:600}
+.result ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.result.day{border-color:var(--day)} .result.day .big{color:var(--day)}
+.result.pct{border-color:var(--pct)} .result.pct .big{color:var(--pct)}
+.result.top{border-color:var(--top)} .result.top .big{color:var(--top)}
+.result.none{border-color:var(--none)} .result.none .big{color:var(--none)}
+.result.wait{border-style:dashed}
+.path{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
+.path span{background:var(--none-soft);border-radius:999px;padding:2px 10px}
+.calc{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.calc label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.calc input{width:120px;font:inherit;padding:6px 8px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);text-align:right}
+.calc output{font-family:var(--font-num);font-size:26px;font-weight:600}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
+
+.mapbox{overflow-x:auto;padding:6px 2px 10px}
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree{display:inline-flex}
+.tree li{display:flex;align-items:center;position:relative;padding:5px 0 5px 26px}
+.tree>li{padding-left:0}
+.tree ul{display:flex;flex-direction:column;position:relative;margin-left:26px}
+.tree ul::before{content:"";position:absolute;left:-26px;top:50%;width:26px;border-top:2px solid var(--line)}
+.tree li::before{content:"";position:absolute;left:0;top:50%;width:26px;border-top:2px solid var(--line)}
+.tree li::after{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--line)}
+.tree li:first-child::after{top:50%}
+.tree li:last-child::after{bottom:50%}
+.tree li:only-child::after{display:none}
+.tree>li::before,.tree>li::after{display:none}
+.node{flex:none;background:var(--panel);border:1.5px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit;color:var(--ink);text-align:left;max-width:210px;line-height:1.35}
+.node b{display:block;font-size:14px}
+.node small{display:block;color:var(--muted);font-size:12px}
+.node.root{background:var(--ink);color:var(--panel);border-color:var(--ink);cursor:default}
+.node.root small{color:inherit;opacity:.75}
+.node.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.node.leaf b{font-family:var(--font-num);font-size:18px;font-weight:600}
+.node.leaf.day{background:var(--day-soft);border-color:var(--day)} .node.leaf.day b{color:var(--day)}
+.node.leaf.pct{background:var(--pct-soft);border-color:var(--pct)} .node.leaf.pct b{color:var(--pct)}
+.node.leaf.top{background:var(--top-soft);border-color:var(--top)} .node.leaf.top b{color:var(--top)}
+.node.leaf.none{background:var(--none-soft);border-color:var(--none)} .node.leaf.none b{color:var(--none)}
+.node.leaf.on{box-shadow:0 0 0 3px var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.ref{display:flex;flex-direction:column;gap:10px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ref ol,.ref ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:500}
+.pill.off{background:var(--none-soft);color:var(--none)}
+.pill.keep{background:var(--day-soft);color:var(--day)}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.days div{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.days div b{font-family:var(--font-num);font-size:16px}
+.note{color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Host Salary Guide</h1>
+    <p class="lede">Salary is settled every half-month. Pick a scenario, then answer the questions one by one to see the base pay on the right. The full map below highlights your path, and you can click any box on it. Amounts are in Philippine pesos (₱). Diamonds are counted in K (80K = 80,000 diamonds).</p>
+  </header>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+
+  <section class="work">
+    <div class="panel"><div class="steps" id="steps"></div></div>
+    <div class="panel result" id="result" aria-live="polite"></div>
+  </section>
+
+  <section class="panel" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="mapTitle"></h2>
+    <div class="legend">
+      <span><i style="background:var(--day)"></i>Daily rate</span>
+      <span><i style="background:var(--pct)"></i>20% commission</span>
+      <span><i style="background:var(--top)"></i>300K+ tiers</span>
+      <span><i style="background:var(--none)"></i>No back pay</span>
+    </div>
+    <div class="mapbox" id="map"></div>
+  </section>
+
+  <section class="refs">
+    <div class="panel ref">
+      <h2>Paydays</h2>
+      <div class="tbl"><table>
+        <tr><th>What is paid</th><th>When</th></tr>
+        <tr><td>Pay for the 1st–15th</td><td>30th of the same month</td></tr>
+        <tr><td>Pay for the 16th–month end</td><td>15th of the next month</td></tr>
+        <tr><td>Back pay, raise difference, bonus</td><td>15th of the next month</td></tr>
+      </table></div>
+      <p class="note">Pay is held for half a month. Back pay = full-month pay due − amount already paid (any 20% commission already paid is deducted).</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>Attendance standard: 80%</h2>
+      <p>Hosts who work the whole period need <b>12 days</b> per half-month and <b>24 days</b> per month.</p>
+      <p>Hosts who join mid-period need 80% of their days on board (start day included), rounded to the nearest day. Example: start on the 10th, 6 days on board by the 15th, 5 days required.</p>
+      <div class="days" id="dayGrid"></div>
+      <p class="note">Left: days on board. Right, in bold: days required.</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>No cap on base pay</h2>
+      <p>Once attendance is met, every day streamed is paid. 12 days streamed pays 12 days. 15 days streamed pays 15 days.</p>
+      <div class="tbl"><table>
+        <tr><th>Half-month diamonds</th><th>Host</th><th class="r">Rate</th></tr>
+        <tr><td>Below 150K</td><td>New host (newcomer protection)</td><td class="r">₱923/day</td></tr>
+        <tr><td>Below 150K</td><td>Regular host</td><td class="r">₱755/day</td></tr>
+        <tr><td>150K–300K</td><td>All hosts</td><td class="r">₱1,000/day</td></tr>
+        <tr><td>300K and above</td><td>All hosts</td><td class="r">₱13,000+</td></tr>
+      </table></div>
+      <p class="note">The first 7 days are the trial. A host is new through day 15 and regular after day 15. ₱13,000+ means ₱13,000 is guaranteed regardless of attendance, and each day beyond 13 adds ₱1,000.</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>Raise ladder</h2>
+      <div class="tbl"><table>
+        <tr><th>Full-month diamonds</th><th class="r">Monthly base</th><th class="r">Daily rate</th><th class="r">Bonus</th></tr>
+        <tr><td>300K–500K</td><td class="r">₱26,000</td><td class="r">₱1,000</td><td class="r">–</td></tr>
+        <tr><td>500K–800K</td><td class="r">₱28,000</td><td class="r">₱1,077</td><td class="r">–</td></tr>
+        <tr><td>800K–1M</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">–</td></tr>
+        <tr><td>1M–2M</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">₱15,000</td></tr>
+        <tr><td>2M and above</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">₱20,000</td></tr>
+      </table></div>
+      <p class="note">Tiers use total diamonds for the full month. Daily rate = monthly base ÷ 26 days. The raise needs 24 days of attendance in the month. Each half-month is first paid at ₱1,000/day and the difference is settled after the month ends. The bonus does not depend on attendance and is paid on the 15th.</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>Full-month back pay</h2>
+      <p>If a host missed the daily rate in either half-month but catches up over the full month, the whole month is paid at the daily rate. It does not matter which half was missed.</p>
+      <div class="tbl"><table>
+        <tr><th>Month attendance</th><th>Month diamonds</th><th>Result</th></tr>
+        <tr><td>24 days or more</td><td>160K–300K</td><td>Whole month at ₱755/day</td></tr>
+        <tr><td>24 days or more</td><td>300K and above</td><td>Whole month at ₱1,000/day or more, see raise ladder</td></tr>
+        <tr><td>24 days or more</td><td>Below 160K</td><td>No back pay</td></tr>
+        <tr><td>Fewer than 24 days</td><td>Any</td><td>No back pay</td></tr>
+      </table></div>
+    </div>
+
+    <div class="panel ref">
+      <h2>Bonus changes</h2>
+      <div class="tbl"><table>
+        <tr><th>Item</th><th>New policy</th></tr>
+        <tr><td>Perfect attendance bonus</td><td><span class="pill off">Removed</span></td></tr>
+        <tr><td>Hard work bonus</td><td><span class="pill off">Removed</span></td></tr>
+        <tr><td>Target achievement bonus</td><td><span class="pill off">Removed</span></td></tr>
+        <tr><td>Seniority raise</td><td><span class="pill off">Removed</span></td></tr>
+        <tr><td>Base pay</td><td><span class="pill keep">No cap</span></td></tr>
+        <tr><td>Raise</td><td><span class="pill keep">Kept, see raise ladder</span></td></tr>
+      </table></div>
+    </div>
+
+    <div class="panel ref">
+      <h2>Grounds for appeal</h2>
+      <p>A host with fewer than 12 days can appeal to Haru on any of these grounds:</p>
+      <ol>
+        <li>Illness that needs a long leave to rest</li>
+        <li>A family emergency that needs a long leave</li>
+        <li>Not in good condition and asking for rest to recover</li>
+        <li>Repeated unexpected events (emergencies, sudden incidents)</li>
+        <li>Other situations that need a specific explanation</li>
+      </ol>
+    </div>
+
+    <div class="panel ref">
+      <h2>Video proof for an appeal</h2>
+      <ol>
+        <li>Fever: film the thermometer reading with your face in the shot</li>
+        <li>Film yourself taking the related medicine</li>
+        <li>Other illness: film the medicine and yourself swallowing it</li>
+        <li>Personal matters: film the situation and name a witness</li>
+      </ol>
+    </div>
+
+    <div class="panel ref">
+      <h2>Pay after an approved appeal</h2>
+      <p>New hosts get ₱923/day, with no daily-average check. Regular hosts are matched to a tier by daily average diamonds, then paid for the days actually streamed.</p>
+      <div class="tbl"><table>
+        <tr><th>Matching tier</th><th class="r">Daily average</th><th class="r">Regular host rate</th></tr>
+        <tr><td>Below the 80K tier</td><td class="r">Below 6.67K</td><td class="r">20% commission</td></tr>
+        <tr><td>80K tier</td><td class="r">6.67K–12.5K</td><td class="r">₱755/day</td></tr>
+        <tr><td>150K tier</td><td class="r">12.5K–25K</td><td class="r">₱1,000/day</td></tr>
+        <tr><td>300K tier</td><td class="r">25K and above</td><td class="r">₱1,000/day</td></tr>
+      </table></div>
+      <p class="note">Daily average = half-month diamonds ÷ days actually streamed. The lines come from 12 days (80K ÷ 12 ≈ 6.67K). Remaining days = days in the period − approved leave days, and 80% of them must still be streamed.</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const PER = "/day";
+const PCT = "20% commission";
+const NOPAY = "No back pay";
+
+const R = {
+  new923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["Pay = days streamed × ₱923","No cap: every day streamed is paid"]},
+  trial923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["HR decides whether the trial is passed. Attendance is not a requirement","Pay = days streamed × ₱923"]},
+  old755:{big:"₱755"+PER,kind:"day",tag:"Regular host rate",rate:755,lines:["Pay = days streamed × ₱755","No cap: 12 days pays 12 days, 15 days pays 15 days"]},
+  k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K tier rate",rate:1000,lines:["Pay = days streamed × ₱1,000","No cap: 15 days pays ₱15,000"]},
+  k13:{big:"₱13,000+",kind:"top",tag:"300K+ tier, attendance not required",rate:1000,floor:13000,lines:["₱13,000 is guaranteed, even with only 1 day streamed","Each day beyond 13 adds ₱1,000. 15 days pays ₱15,000","A raise applies from 500K diamonds in the full month, settled after the month ends"],jump:[["month","See the monthly raise"]]},
+  pctTrial:{big:PCT,kind:"pct",tag:"Trial not passed",lines:["No daily rate. Pay is 20% commission only"]},
+  pct:{big:PCT,kind:"pct",tag:"Attendance not met this half-month",lines:["No daily rate this half-month. Pay is 20% commission only","You can appeal if there is a special situation","Catch up over the full month to get back pay"],jump:[["appeal","Go to appeal"],["month","See monthly back pay"]]},
+  pctAppeal:{big:PCT,kind:"pct",tag:"Still commission after appeal",lines:["No daily rate. Pay is 20% commission only","Back pay is still possible with 24 days and enough diamonds in the month"],jump:[["month","See monthly back pay"]]},
+  noMonth:{big:NOPAY,kind:"none",tag:"Fewer than 24 days in the month",lines:["No back pay and no raise","Half-month pay already issued stays the same","The ₱13,000 guarantee for a 300K+ half-month is not affected"]},
+  noDia:{big:NOPAY,kind:"none",tag:"Month diamonds below 160K",lines:["Month diamonds did not reach 160K, so there is no back pay","Half-month pay already issued stays the same"]},
+  bonusA:{big:"₱15,000 bonus",kind:"top",tag:"Bonus does not need attendance",lines:["1M–2M diamonds in the month earns a ₱15,000 bonus, paid on the 15th","With fewer than 24 days there is no back pay and no raise"]},
+  bonusB:{big:"₱20,000 bonus",kind:"top",tag:"Bonus does not need attendance",lines:["2M diamonds or more in the month earns a ₱20,000 bonus, paid on the 15th","With fewer than 24 days there is no back pay and no raise"]},
+  m755:{big:"₱755"+PER,kind:"day",tag:"Full-month back pay",rate:755,month:true,lines:["Month pay due = days streamed in the month × ₱755","Back pay on the 15th = month pay due − amount already paid"]},
+  r26:{big:"₱26,000",kind:"top",tag:"Monthly base, ₱1,000/day",rate:1000,month:true,lines:["Whole month at ₱1,000/day (₱26,000 ÷ 26 days)","Back pay on the 15th = month pay due − amount already paid"]},
+  r28:{big:"₱28,000",kind:"top",tag:"Monthly base, ₱1,077/day",rate:28000/26,month:true,lines:["Whole month at ₱1,077/day (₱28,000 ÷ 26 days)","First paid at ₱1,000/day. The difference is paid on the 15th of the next month"]},
+  r30:{big:"₱30,000",kind:"top",tag:"Monthly base, ₱1,154/day",rate:30000/26,month:true,lines:["Whole month at ₱1,154/day (₱30,000 ÷ 26 days)","First paid at ₱1,000/day. The difference is paid on the 15th of the next month"]},
+  r30a:{big:"₱30,000 + ₱15,000",kind:"top",tag:"Monthly base + bonus",rate:30000/26,bonus:15000,month:true,lines:["Whole month at ₱1,154/day (₱30,000 ÷ 26 days)","Plus a ₱15,000 bonus, paid on the 15th","First paid at ₱1,000/day. The difference is paid on the 15th of the next month"]},
+  r30b:{big:"₱30,000 + ₱20,000",kind:"top",tag:"Monthly base + bonus",rate:30000/26,bonus:20000,month:true,lines:["Whole month at ₱1,154/day (₱30,000 ÷ 26 days)","Plus a ₱20,000 bonus, paid on the 15th","First paid at ₱1,000/day. The difference is paid on the 15th of the next month"]},
+  aNew:{big:"₱923"+PER,kind:"day",tag:"New host appeal approved, no daily-average check",rate:923,lines:["Pay = days streamed × ₱923"]},
+  a755:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
+  a1k:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 150K tier",rate:1000,lines:["Pay = days streamed × ₱1,000"]},
+  a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 300K tier",rate:1000,lines:["Pay = days streamed × ₱1,000","If the half-month total reaches 300K, ₱13,000+ applies instead"]}
+};
+
+
+const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
+const dia = isNew => {
+  const base = isNew ? R.new923 : R.old755;
+  const a = r => isNew
+    ? att(r,"Met","Not met","Did attendance reach the required days?","Required days = days on board (start day included) × 80%, rounded. See the table below.")
+    : att(r,"12 days or more","Fewer than 12 days","Did the host stream 12 days this half-month?","12 days = 15 days × 80%.");
+  return {q:"How many diamonds this half-month?", opts:[
+    {l:"Below 80K", next:a(base)},
+    {l:"80K–150K", s:"80K up to just under 150K", next:a(base)},
+    {l:"150K–300K", s:"150K up to just under 300K", next:a(R.k1)},
+    {l:"300K and above", next:R.k13}
+  ]};
+};
+const TREES = {
+  half:{name:"Half-month base pay", desc:"Use at every half-month settlement", root:"Half-month base pay",
+    tree:{q:"Which stage is the host in?", opts:[
+      {l:"Trial", s:"First 7 days", next:{q:"Did the host pass the 7-day trial?", hint:"HR decides. A strong host with low attendance for good reasons (even under 5 days) can still pass.", opts:[
+        {l:"Passed", next:R.trial923},{l:"Not passed", next:R.pctTrial}]}},
+      {l:"New host", s:"Trial passed, day 8–15", next:dia(true)},
+      {l:"Regular host", s:"More than 15 days on board", next:dia(false)}
+    ]},
+    start:[2,1,0]},
+  month:{name:"Monthly back pay and raise", desc:"Use after the month ends, paid on the 15th", root:"Monthly settlement",
+    tree:{q:"Did the host stream 24 days in the month?", hint:"This is the month total. Each half does not need 12 days on its own.", opts:[
+      {l:"24 days or more", next:{q:"Total diamonds for the full month?", hint:"Add both half-months together.", opts:[
+        {l:"Below 160K", next:R.noDia},
+        {l:"160K–300K", next:R.m755},
+        {l:"300K–500K", next:R.r26},
+        {l:"500K–800K", next:R.r28},
+        {l:"800K–1M", next:R.r30},
+        {l:"1M–2M", next:R.r30a},
+        {l:"2M and above", next:R.r30b}]}},
+      {l:"Fewer than 24 days", next:{q:"Did month diamonds reach 1M?", hint:"The bonus from 1M does not depend on attendance.", opts:[
+        {l:"Below 1M", next:R.noMonth},
+        {l:"1M–2M", next:R.bonusA},
+        {l:"2M and above", next:R.bonusB}]}}
+    ]},
+    start:[0,3]},
+  appeal:{name:"Appeal", desc:"For hosts under 12 days with a special situation", root:"Appeal",
+    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required.", opts:[
+      {l:"Approved", next:{q:"Did the host stream 80% of the remaining days?", hint:"Remaining days = days in the period − approved leave days. Example: 5 days of leave leaves 10 days, so 8 days are required.", opts:[
+        {l:"80% or more", next:{q:"New host or regular host?", opts:[
+          {l:"New host", s:"Up to and including day 15", next:R.aNew},
+          {l:"Regular host", s:"More than 15 days on board", next:{q:"What is the daily average of diamonds?", hint:"Daily average = half-month diamonds ÷ days streamed.", opts:[
+            {l:"Below 6.67K", next:R.pctAppeal},
+            {l:"6.67K–12.5K", next:R.a755},
+            {l:"12.5K–25K", next:R.a1k},
+            {l:"25K and above", next:R.a1kTop}]}}]}},
+        {l:"Below 80%", next:R.pctAppeal}]}},
+      {l:"Not approved, or no appeal", next:R.pctAppeal}
+    ]},
+    start:[0,0,1,1]}
+};
+
+
+let cur = "half";
+const paths = {half:[...TREES.half.start], month:[...TREES.month.start], appeal:[...TREES.appeal.start]};
+const $ = id => document.getElementById(id);
+const fmt = n => (n < 0 ? "−" : "") + "₱" + Math.abs(Math.round(n)).toLocaleString("en-US");
+const isLeaf = n => !n.opts;
+
+function walk(){
+  const t = TREES[cur], p = paths[cur];
+  let node = t.tree; const steps = [];
+  for (let i = 0; ; i++){
+    if (isLeaf(node)) return {steps, leaf:node};
+    steps.push({node, pick:p[i]});
+    if (p[i] == null) return {steps, leaf:null};
+    node = node.opts[p[i]].next;
+  }
+}
+
+function renderTabs(){
+  $("tabs").innerHTML = Object.entries(TREES).map(([k,t]) =>
+    `<button class="tab" role="tab" aria-selected="${k===cur}" data-tab="${k}"><b>${t.name}</b><span>${t.desc}</span></button>`).join("");
+}
+
+function renderSteps(w){
+  $("steps").innerHTML = w.steps.map((s,i) => `
+    <div class="step">
+      <div class="qrow"><span class="n">${i+1}</span><span class="q">${s.node.q}</span></div>
+      ${s.node.hint ? `<div class="hint">${s.node.hint}</div>` : ""}
+      <div class="opts">${s.node.opts.map((o,j) =>
+        `<button class="opt" aria-pressed="${s.pick===j}" data-step="${i}" data-opt="${j}">${o.l}${o.s?`<small>${o.s}</small>`:""}</button>`).join("")}</div>
+    </div>`).join("") + `<button class="reset" id="reset">Start over</button>`;
+}
+
+function renderResult(w){
+  const el = $("result"), r = w.leaf;
+  const crumbs = w.steps.filter(s => s.pick != null).map(s => `<span>${s.node.opts[s.pick].l}</span>`).join("");
+  if (!r){
+    el.className = "panel result wait";
+    el.innerHTML = `<div class="tag">Result</div><p>One more step. Answer the questions on the left and the base pay appears here.</p><div class="path">${crumbs}</div>`;
+    return;
+  }
+  el.className = "panel result " + r.kind;
+  let calc = "";
+  if (r.rate){
+    calc = `<div class="calc">
+      <label for="days">${r.month ? "Days streamed in the month" : "Days streamed"}<input id="days" type="number" min="0" max="31" inputmode="numeric" value="${r.month ? 26 : 13}"></label>
+      ${r.month ? `<label for="paid">Already paid (₱)<input id="paid" type="number" min="0" inputmode="numeric" value="0"></label>` : ""}
+      <div><span class="tag" id="calcLabel"></span><br><output id="amt"></output></div>
+    </div>`;
+  }
+  el.innerHTML = `
+    <div class="tag">${r.tag}</div>
+    <div class="big">${r.big}</div>
+    <div class="path">${crumbs}</div>
+    <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
+    ${calc}
+    ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
+  if (r.rate) updateCalc(r);
+}
+
+function updateCalc(r){
+  const d = Math.max(0, +$("days").value || 0);
+  let total = d * r.rate, label;
+  if (r.floor && !r.month){ total = Math.max(r.floor, total); label = "Pay due this half-month (₱13,000 guaranteed)"; }
+  else if (r.month){
+    total -= Math.max(0, +$("paid").value || 0);
+    label = "Back pay on the 15th = month pay due − already paid" + (r.bonus ? ", plus bonus " + fmt(r.bonus) : "");
+  } else label = "Pay due this half-month";
+  $("calcLabel").textContent = label;
+  $("amt").textContent = fmt(total);
+}
+
+function renderMap(){
+  const t = TREES[cur], p = paths[cur];
+  const build = (node, trail, onPath) => {
+    if (isLeaf(node)) return "";
+    return "<ul>" + node.opts.map((o,j) => {
+      const tr = [...trail, j], on = onPath && p[trail.length] === j, leaf = isLeaf(o.next);
+      const kids = leaf
+        ? `<ul><li><button class="node leaf ${o.next.kind}${on?" on":""}" data-path="${tr.join(",")}"><b>${o.next.big}</b><small>${o.next.tag}</small></button></li></ul>`
+        : build(o.next, tr, on);
+      return `<li><button class="node${on?" on":""}" data-path="${tr.join(",")}"><b>${o.l}</b>${leaf?"":`<small>${o.next.q}</small>`}</button>${kids}</li>`;
+    }).join("") + "</ul>";
+  };
+  $("mapTitle").textContent = "Full map: " + t.name;
+  $("map").innerHTML = `<ul class="tree"><li><span class="node root"><b>${t.root}</b><small>${t.tree.q}</small></span>${build(t.tree, [], true)}</li></ul>`;
+}
+
+function render(){ const w = walk(); renderTabs(); renderSteps(w); renderResult(w); renderMap(); }
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.tab){ cur = b.dataset.tab; render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
+  else if (b.dataset.step){ const i = +b.dataset.step; paths[cur] = paths[cur].slice(0, i); paths[cur][i] = +b.dataset.opt; render(); }
+  else if (b.dataset.path){ paths[cur] = b.dataset.path.split(",").map(Number); render(); }
+  else if (b.id === "reset"){ paths[cur] = []; render(); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "days" || e.target.id === "paid"){ const w = walk(); if (w.leaf) updateCalc(w.leaf); }
+});
+
+$("dayGrid").innerHTML = Array.from({length:15}, (_,i) => `<div><span>${i+1}</span><b>${Math.round((i+1)*0.8)}</b></div>`).join("");
+render();
+</script>
+</body>
+</html>

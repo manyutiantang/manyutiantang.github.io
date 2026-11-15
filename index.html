@@ -136,13 +136,23 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .days div{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .days div b{font-family:var(--font-num);font-size:16px}
 .note{color:var(--muted);font-size:13px}
+
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.lang{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel);flex:none}
+.lang a,.lang span{padding:6px 16px;font-size:14px;font-weight:500;text-decoration:none;color:var(--muted)}
+.lang a:hover{color:var(--accent)}
+.lang a:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.lang span{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .lang span{color:#10161D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lang span{color:#10161D}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>Host Salary Guide</h1>
-    <p class="lede">Salary is settled every half-month. Pick a scenario, then answer the questions one by one to see the base pay on the right. The full map below highlights your path, and you can click any box on it. Amounts are in Philippine pesos (₱). Diamonds are counted in K (80K = 80,000 diamonds).</p>
+  <header class="top">
+    <div><h1>Host Salary Guide</h1>
+    <p class="lede">Salary is settled every half-month. Pick a scenario, then answer the questions one by one to see the base pay on the right. The full map below highlights your path, and you can click any box on it. Amounts are in Philippine pesos (₱). Diamonds are counted in K (80K = 80,000 diamonds).</p></div>
+    <nav class="lang" aria-label="Language"><span aria-current="page">English</span><a href="zh/" lang="zh-CN">中文</a></nav>
   </header>
 
   <div class="tabs" role="tablist" id="tabs"></div>

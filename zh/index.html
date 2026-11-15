@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>主播薪资推导图</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 布局思路：上方三选一的结算场景 → 左侧逐步选择、右侧结果卡 → 下方整张导图（与选择联动）→ 参考表 */
+:root{
+  --bg:#F3F5F8; --panel:#FFFFFF; --ink:#15202B; --muted:#5C6B7A; --line:#D5DCE4;
+  --accent:#2347D3; --accent-soft:#E6EBFC;
+  --day:#0E7A55; --day-soft:#DDF3EA;
+  --pct:#A85B00; --pct-soft:#FCEBD3;
+  --top:#6A2BC2; --top-soft:#EEE3FB;
+  --none:#56626E; --none-soft:#E7EBEF;
+  --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-num:"Barlow Condensed","Noto Sans SC","PingFang SC",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
+    --accent:#8FA6FF; --accent-soft:#222E57;
+    --day:#5FD3A6; --day-soft:#153729;
+    --pct:#F2B25C; --pct-soft:#3D2C12;
+    --top:#C29BFF; --top-soft:#2F2148;
+    --none:#A9B4BF; --none-soft:#27313B;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
+  --accent:#8FA6FF; --accent-soft:#222E57;
+  --day:#5FD3A6; --day-soft:#153729;
+  --pct:#F2B25C; --pct-soft:#3D2C12;
+  --top:#C29BFF; --top-soft:#2F2148;
+  --none:#A9B4BF; --none-soft:#27313B;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 56px;display:flex;flex-direction:column;gap:24px}
+h1{font-size:28px;line-height:1.25;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:18px;margin:0;font-weight:700}
+p{margin:0}
+.lede{color:var(--muted);max-width:46em;margin-top:6px}
+
+.tabs{display:flex;flex-wrap:wrap;gap:10px}
+.tab{flex:1 1 220px;text-align:left;background:var(--panel);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
+.tab b{display:block;font-size:16px}
+.tab span{color:var(--muted);font-size:13px}
+.tab[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.tab[aria-selected="true"] b{color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.work{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:820px){.work{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.steps{display:flex;flex-direction:column;gap:18px}
+.step{display:flex;flex-direction:column;gap:8px}
+.step .qrow{display:flex;gap:10px;align-items:baseline}
+.step .n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--panel);font-size:13px;display:grid;place-items:center;font-weight:700}
+.step .q{font-weight:700;font-size:16px}
+.step .hint{color:var(--muted);font-size:13px;padding-left:34px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;padding-left:34px}
+.opt{background:var(--panel);border:1.5px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--ink);font:inherit;text-align:left;min-width:108px}
+.opt small{display:block;color:var(--muted);font-size:12px}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+:root[data-theme="dark"] .opt[aria-pressed="true"]{color:#10161D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .opt[aria-pressed="true"]{color:#10161D}}
+.opt[aria-pressed="true"] small{color:inherit;opacity:.85}
+.reset{align-self:flex-start;background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;padding:4px 0;text-decoration:underline}
+
+.result{position:sticky;top:16px;display:flex;flex-direction:column;gap:12px;border-width:2px}
+.result .tag{font-size:13px;color:var(--muted)}
+.result .big{font-family:var(--font-num);font-size:52px;line-height:1.05;font-weight:600}
+.result ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.result.day{border-color:var(--day)} .result.day .big{color:var(--day)}
+.result.pct{border-color:var(--pct)} .result.pct .big{color:var(--pct)}
+.result.top{border-color:var(--top)} .result.top .big{color:var(--top)}
+.result.none{border-color:var(--none)} .result.none .big{color:var(--none)}
+.result.wait{border-style:dashed}
+.path{display:flex;flex-wrap:wrap;gap:6px;font-size:13px}
+.path span{background:var(--none-soft);border-radius:999px;padding:2px 10px}
+.calc{border-top:1px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px}
+.calc label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:14px}
+.calc input{width:120px;font:inherit;padding:6px 8px;border:1.5px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);text-align:right}
+.calc output{font-family:var(--font-num);font-size:26px;font-weight:600}
+.jump{display:flex;flex-wrap:wrap;gap:8px}
+.jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
+
+.mapbox{overflow-x:auto;padding:6px 2px 10px}
+.tree,.tree ul{list-style:none;margin:0;padding:0}
+.tree{display:inline-flex}
+.tree li{display:flex;align-items:center;position:relative;padding:5px 0 5px 26px}
+.tree>li{padding-left:0}
+.tree ul{display:flex;flex-direction:column;position:relative;margin-left:26px}
+.tree ul::before{content:"";position:absolute;left:-26px;top:50%;width:26px;border-top:2px solid var(--line)}
+.tree li::before{content:"";position:absolute;left:0;top:50%;width:26px;border-top:2px solid var(--line)}
+.tree li::after{content:"";position:absolute;left:0;top:0;bottom:0;border-left:2px solid var(--line)}
+.tree li:first-child::after{top:50%}
+.tree li:last-child::after{bottom:50%}
+.tree li:only-child::after{display:none}
+.tree>li::before,.tree>li::after{display:none}
+.node{flex:none;background:var(--panel);border:1.5px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer;font:inherit;color:var(--ink);text-align:left;max-width:210px;line-height:1.35}
+.node b{display:block;font-size:14px}
+.node small{display:block;color:var(--muted);font-size:12px}
+.node.root{background:var(--ink);color:var(--panel);border-color:var(--ink);cursor:default}
+.node.root small{color:inherit;opacity:.75}
+.node.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}
+.node.leaf b{font-family:var(--font-num);font-size:18px;font-weight:600}
+.node.leaf.day{background:var(--day-soft);border-color:var(--day)} .node.leaf.day b{color:var(--day)}
+.node.leaf.pct{background:var(--pct-soft);border-color:var(--pct)} .node.leaf.pct b{color:var(--pct)}
+.node.leaf.top{background:var(--top-soft);border-color:var(--top)} .node.leaf.top b{color:var(--top)}
+.node.leaf.none{background:var(--none-soft);border-color:var(--none)} .node.leaf.none b{color:var(--none)}
+.node.leaf.on{box-shadow:0 0 0 3px var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+
+.refs{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.ref{display:flex;flex-direction:column;gap:10px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:500;font-size:13px}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.ref ol,.ref ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+.pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:500}
+.pill.off{background:var(--none-soft);color:var(--none)}
+.pill.keep{background:var(--day-soft);color:var(--day)}
+.days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.days div{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.days div b{font-family:var(--font-num);font-size:16px}
+.note{color:var(--muted);font-size:13px}
+
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.lang{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel);flex:none}
+.lang a,.lang span{padding:6px 16px;font-size:14px;font-weight:500;text-decoration:none;color:var(--muted)}
+.lang a:hover{color:var(--accent)}
+.lang a:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.lang span{background:var(--accent);color:#fff}
+:root[data-theme="dark"] .lang span{color:#10161D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lang span{color:#10161D}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>主播薪资推导图</h1>
+    <p class="lede">工资每半个月结算一次。先选结算场景，再按主播的实际情况一步一步选，右侧直接给出底薪。下方的整张导图会同步标出你走过的路径，也可以直接点导图上的任意一格。金额单位是菲律宾比索（₱），钻石以K计（80K = 80,000钻石）。</p></div>
+    <nav class="lang" aria-label="语言"><a href="../" lang="en">English</a><span aria-current="page">中文</span></nav>
+  </header>
+
+  <div class="tabs" role="tablist" id="tabs"></div>
+
+  <section class="work">
+    <div class="panel"><div class="steps" id="steps"></div></div>
+    <div class="panel result" id="result" aria-live="polite"></div>
+  </section>
+
+  <section class="panel" style="display:flex;flex-direction:column;gap:12px">
+    <h2 id="mapTitle"></h2>
+    <div class="legend">
+      <span><i style="background:var(--day)"></i>按天发日薪</span>
+      <span><i style="background:var(--pct)"></i>20%佣金</span>
+      <span><i style="background:var(--top)"></i>300K以上档</span>
+      <span><i style="background:var(--none)"></i>不补发</span>
+    </div>
+    <div class="mapbox" id="map"></div>
+  </section>
+
+  <section class="refs">
+    <div class="panel ref">
+      <h2>发薪日</h2>
+      <div class="tbl"><table>
+        <tr><th>结算内容</th><th>发放时间</th></tr>
+        <tr><td>1–15号的工资</td><td>当月30号</td></tr>
+        <tr><td>16号–月底的工资</td><td>次月15号</td></tr>
+        <tr><td>全月补发、加薪差额、奖金</td><td>次月15号</td></tr>
+      </table></div>
+      <p class="note">公司押半个月工资。补发金额 = 全月应发 − 已发金额（已发的20%佣金要减掉）。</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>出勤标准：80%</h2>
+      <p>整期在职的主播，半个月出勤满 <b>12天</b>，全月满 <b>24天</b>。</p>
+      <p>半路入职的新主播，按在职天数（含入职当天）× 80% 四舍五入。例：10号入职，到15号在职6天，需出勤5天。</p>
+      <div class="days" id="dayGrid"></div>
+      <p class="note">每格左边是在职天数，右边加粗的是应出勤天数。</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>底薪上不封顶</h2>
+      <p>出勤达标后，播几天发几天。播12天发12天的日薪，播15天发15天的日薪。</p>
+      <div class="tbl"><table>
+        <tr><th>半月钻石</th><th>主播</th><th class="r">日薪</th></tr>
+        <tr><td>低于150K</td><td>新主播（新手保护期）</td><td class="r">₱923/天</td></tr>
+        <tr><td>低于150K</td><td>老主播</td><td class="r">₱755/天</td></tr>
+        <tr><td>150K–300K</td><td>全部主播</td><td class="r">₱1,000/天</td></tr>
+        <tr><td>300K及以上</td><td>全部主播</td><td class="r">₱13,000+</td></tr>
+      </table></div>
+      <p class="note">入职前7天是试用期；入职15天内（含第15天）算新主播，超过15天算老主播。₱13,000+ 指不看出勤保底₱13,000，出勤超过13天按₱1,000/天继续加。</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>加薪阶梯</h2>
+      <div class="tbl"><table>
+        <tr><th>全月钻石合计</th><th class="r">月底薪</th><th class="r">日薪</th><th class="r">奖金</th></tr>
+        <tr><td>300K–500K</td><td class="r">₱26,000</td><td class="r">₱1,000</td><td class="r">–</td></tr>
+        <tr><td>500K–800K</td><td class="r">₱28,000</td><td class="r">₱1,077</td><td class="r">–</td></tr>
+        <tr><td>800K–1M</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">–</td></tr>
+        <tr><td>1M–2M</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">₱15,000</td></tr>
+        <tr><td>2M及以上</td><td class="r">₱30,000</td><td class="r">₱1,154</td><td class="r">₱20,000</td></tr>
+      </table></div>
+      <p class="note">按全月总钻石对档，日薪 = 月底薪 ÷ 26天。加薪要求全月出勤满24天；每个半月先按₱1,000/天发，差额等全月播完后结算。奖金不看出勤，每月15号发。</p>
+    </div>
+
+    <div class="panel ref">
+      <h2>全月补发</h2>
+      <p>任意一个半月没拿到日薪，只要全月追上来，就按全月出勤天数补发。不分上半月还是下半月。</p>
+      <div class="tbl"><table>
+        <tr><th>全月出勤</th><th>全月钻石</th><th>结果</th></tr>
+        <tr><td>满24天</td><td>160K–300K</td><td>全月按₱755/天</td></tr>
+        <tr><td>满24天</td><td>300K及以上</td><td>全月按₱1,000/天起，见加薪阶梯</td></tr>
+        <tr><td>满24天</td><td>低于160K</td><td>不补发</td></tr>
+        <tr><td>不满24天</td><td>不限</td><td>不补发</td></tr>
+      </table></div>
+    </div>
+
+    <div class="panel ref">
+      <h2>奖金调整</h2>
+      <div class="tbl"><table>
+        <tr><th>项目</th><th>新制度</th></tr>
+        <tr><td>全勤奖</td><td><span class="pill off">取消</span></td></tr>
+        <tr><td>辛苦奖</td><td><span class="pill off">取消</span></td></tr>
+        <tr><td>业绩达成奖</td><td><span class="pill off">取消</span></td></tr>
+        <tr><td>老主播加薪</td><td><span class="pill off">取消</span></td></tr>
+        <tr><td>底薪</td><td><span class="pill keep">上不封顶</span></td></tr>
+        <tr><td>加薪</td><td><span class="pill keep">保留，按加薪阶梯</span></td></tr>
+      </table></div>
+    </div>
+
+    <div class="panel ref">
+      <h2>申诉条件</h2>
+      <p>出勤不满12天时可以向 Haru 申诉，符合以下任意一条：</p>
+      <ol>
+        <li>身体不适、生病，需请长假休息</li>
+        <li>家里有急事，需要请长假处理</li>
+        <li>状态不好，申请休息调整状态</li>
+        <li>多次出现意外情况（紧急情况、突发事件）</li>
+        <li>其他需特别说明的情况</li>
+      </ol>
+    </div>
+
+    <div class="panel ref">
+      <h2>申诉要交的视频证据</h2>
+      <ol>
+        <li>发烧：带脸拍体温计读数</li>
+        <li>服用相关药品</li>
+        <li>其他病症：拍药品和服药视频（需入口）</li>
+        <li>事假：拍办事场景，并有证明人</li>
+      </ol>
+    </div>
+
+    <div class="panel ref">
+      <h2>申诉通过后怎么发</h2>
+      <p>新主播申诉成功，不看日均，按₱923/天。老主播用日均钻石对档，再乘以实际出勤天数。</p>
+      <div class="tbl"><table>
+        <tr><th>对应半月档</th><th class="r">日均钻石</th><th class="r">老主播日薪</th></tr>
+        <tr><td>不到80K档</td><td class="r">低于6.67K</td><td class="r">20%佣金</td></tr>
+        <tr><td>80K档</td><td class="r">6.67K–12.5K</td><td class="r">₱755/天</td></tr>
+        <tr><td>150K档</td><td class="r">12.5K–25K</td><td class="r">₱1,000/天</td></tr>
+        <tr><td>300K档</td><td class="r">25K及以上</td><td class="r">₱1,000/天</td></tr>
+      </table></div>
+      <p class="note">日均钻石 = 半月钻石 ÷ 实际出勤天数；标准线按12天折算（80K ÷ 12 ≈ 6.67K）。剩余天数 = 本期天数 − 批准的请假天数，仍要出勤满80%。</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const PER = "/天";
+const PCT = "20%佣金";
+const NOPAY = "不补发";
+// ---------- 结果 ----------
+const R = {
+  new923:{big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["发放 = 实际出勤天数 × ₱923","上不封顶：播几天发几天"]},
+  trial923:{big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["试用期能否通过由人事判断，不卡出勤","发放 = 实际出勤天数 × ₱923"]},
+  old755:{big:"₱755"+PER,kind:"day",tag:"老主播日薪",rate:755,lines:["发放 = 实际出勤天数 × ₱755","上不封顶：播12天发12天，播15天发15天"]},
+  k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K档日薪",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","上不封顶：播15天发₱15,000"]},
+  k13:{big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","全月钻石到500K以上还有加薪，全月播完后结算"],jump:[["month","看全月加薪"]]},
+  pctTrial:{big:PCT,kind:"pct",tag:"未通过试用",lines:["不发日薪，只按20%佣金结算"]},
+  pct:{big:PCT,kind:"pct",tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
+  pctAppeal:{big:PCT,kind:"pct",tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","全月出勤满24天且钻石达标，仍可补发"],jump:[["month","看全月补发"]]},
+  noMonth:{big:NOPAY,kind:"none",tag:"全月出勤不满24天",lines:["不补发，也不结算加薪","已经发的半月工资不变","半月钻石300K以上的₱13,000保底不受影响"]},
+  noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变"]},
+  bonusA:{big:"奖金 ₱15,000",kind:"top",tag:"奖金不看出勤",lines:["全月钻石1M–2M，奖金₱15,000，每月15号发","出勤不满24天，不补发、不结算加薪"]},
+  bonusB:{big:"奖金 ₱20,000",kind:"top",tag:"奖金不看出勤",lines:["全月钻石2M及以上，奖金₱20,000，每月15号发","出勤不满24天，不补发、不结算加薪"]},
+  m755:{big:"₱755"+PER,kind:"day",tag:"全月补发",rate:755,month:true,lines:["全月应发 = 全月出勤天数 × ₱755","次月15号补发 = 全月应发 − 已发金额"]},
+  r26:{big:"₱26,000",kind:"top",tag:"月底薪，日薪₱1,000",rate:1000,month:true,lines:["全月按₱1,000/天结算（₱26,000 ÷ 26天）","次月15号补发 = 全月应发 − 已发金额"]},
+  r28:{big:"₱28,000",kind:"top",tag:"月底薪，日薪₱1,077",rate:28000/26,month:true,lines:["全月按₱1,077/天结算（₱28,000 ÷ 26天）","平时先按₱1,000/天发，差额次月15号补发"]},
+  r30:{big:"₱30,000",kind:"top",tag:"月底薪，日薪₱1,154",rate:30000/26,month:true,lines:["全月按₱1,154/天结算（₱30,000 ÷ 26天）","平时先按₱1,000/天发，差额次月15号补发"]},
+  r30a:{big:"₱30,000 + ₱15,000",kind:"top",tag:"月底薪 + 奖金",rate:30000/26,bonus:15000,month:true,lines:["全月按₱1,154/天结算（₱30,000 ÷ 26天）","另发奖金₱15,000，每月15号发放","平时先按₱1,000/天发，差额次月15号补发"]},
+  r30b:{big:"₱30,000 + ₱20,000",kind:"top",tag:"月底薪 + 奖金",rate:30000/26,bonus:20000,month:true,lines:["全月按₱1,154/天结算（₱30,000 ÷ 26天）","另发奖金₱20,000，每月15号发放","平时先按₱1,000/天发，差额次月15号补发"]},
+  aNew:{big:"₱923"+PER,kind:"day",tag:"新主播申诉通过，不看日均",rate:923,lines:["发放 = 实际出勤天数 × ₱923"]},
+  a755:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
+  a1k:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，150K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000"]},
+  a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，300K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","半月钻石合计到300K的，直接按₱13,000+发"]}
+};
+
+// ---------- 三棵树 ----------
+const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
+const dia = isNew => {
+  const base = isNew ? R.new923 : R.old755;
+  const a = r => isNew
+    ? att(r,"达标","未达标","出勤达到应出勤天数了吗？","应出勤天数 = 在职天数（含入职当天）× 80%，四舍五入。见下方对照表。")
+    : att(r,"满12天","不满12天","这半个月出勤满12天吗？","12天 = 15天 × 80%。");
+  return {q:"这半个月的钻石是多少？", opts:[
+    {l:"低于80K", next:a(base)},
+    {l:"80K–150K", s:"含80K，不含150K", next:a(base)},
+    {l:"150K–300K", s:"含150K，不含300K", next:a(R.k1)},
+    {l:"300K及以上", next:R.k13}
+  ]};
+};
+const TREES = {
+  half:{name:"半月底薪", desc:"每半个月结算时用", root:"半月底薪",
+    tree:{q:"主播现在处于哪个阶段？", opts:[
+      {l:"试用期", s:"入职前7天", next:{q:"通过7天试用了吗？", hint:"由人事判断。素质好但因客观原因出勤少（哪怕不到5天），也可以通过。", opts:[
+        {l:"通过", next:R.trial923},{l:"未通过", next:R.pctTrial}]}},
+      {l:"新主播", s:"已过试用，入职第8–15天", next:dia(true)},
+      {l:"老主播", s:"入职超过15天", next:dia(false)}
+    ]},
+    start:[2,1,0]},
+  month:{name:"全月补发与加薪", desc:"全月播完后用，次月15号发", root:"全月结算",
+    tree:{q:"全月出勤满24天吗？", hint:"看全月合计，不要求每个半月都满12天。", opts:[
+      {l:"满24天", next:{q:"全月钻石合计多少？", hint:"上下两个半月加起来。", opts:[
+        {l:"低于160K", next:R.noDia},
+        {l:"160K–300K", next:R.m755},
+        {l:"300K–500K", next:R.r26},
+        {l:"500K–800K", next:R.r28},
+        {l:"800K–1M", next:R.r30},
+        {l:"1M–2M", next:R.r30a},
+        {l:"2M及以上", next:R.r30b}]}},
+      {l:"不满24天", next:{q:"全月钻石到1M了吗？", hint:"1M以上的奖金不看出勤。", opts:[
+        {l:"低于1M", next:R.noMonth},
+        {l:"1M–2M", next:R.bonusA},
+        {l:"2M及以上", next:R.bonusB}]}}
+    ]},
+    start:[0,3]},
+  appeal:{name:"申诉", desc:"出勤不满12天、有特殊情况时用", root:"申诉",
+    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。", opts:[
+      {l:"通过", next:{q:"剩余天数里出勤满80%吗？", hint:"剩余天数 = 本期天数 − 批准的请假天数。例：请假5天，剩10天，需出勤8天。", opts:[
+        {l:"满80%", next:{q:"新主播还是老主播？", opts:[
+          {l:"新主播", s:"入职15天内，含第15天", next:R.aNew},
+          {l:"老主播", s:"入职超过15天", next:{q:"日均钻石是多少？", hint:"日均 = 半月钻石 ÷ 实际出勤天数。", opts:[
+            {l:"低于6.67K", next:R.pctAppeal},
+            {l:"6.67K–12.5K", next:R.a755},
+            {l:"12.5K–25K", next:R.a1k},
+            {l:"25K及以上", next:R.a1kTop}]}}]}},
+        {l:"不满80%", next:R.pctAppeal}]}},
+      {l:"未通过或没有申诉", next:R.pctAppeal}
+    ]},
+    start:[0,0,1,1]}
+};
+
+// ---------- 状态 ----------
+let cur = "half";
+const paths = {half:[...TREES.half.start], month:[...TREES.month.start], appeal:[...TREES.appeal.start]};
+const $ = id => document.getElementById(id);
+const fmt = n => (n < 0 ? "−" : "") + "₱" + Math.abs(Math.round(n)).toLocaleString("en-US");
+const isLeaf = n => !n.opts;
+
+function walk(){
+  const t = TREES[cur], p = paths[cur];
+  let node = t.tree; const steps = [];
+  for (let i = 0; ; i++){
+    if (isLeaf(node)) return {steps, leaf:node};
+    steps.push({node, pick:p[i]});
+    if (p[i] == null) return {steps, leaf:null};
+    node = node.opts[p[i]].next;
+  }
+}
+
+function renderTabs(){
+  $("tabs").innerHTML = Object.entries(TREES).map(([k,t]) =>
+    `<button class="tab" role="tab" aria-selected="${k===cur}" data-tab="${k}"><b>${t.name}</b><span>${t.desc}</span></button>`).join("");
+}
+
+function renderSteps(w){
+  $("steps").innerHTML = w.steps.map((s,i) => `
+    <div class="step">
+      <div class="qrow"><span class="n">${i+1}</span><span class="q">${s.node.q}</span></div>
+      ${s.node.hint ? `<div class="hint">${s.node.hint}</div>` : ""}
+      <div class="opts">${s.node.opts.map((o,j) =>
+        `<button class="opt" aria-pressed="${s.pick===j}" data-step="${i}" data-opt="${j}">${o.l}${o.s?`<small>${o.s}</small>`:""}</button>`).join("")}</div>
+    </div>`).join("") + `<button class="reset" id="reset">重新选择</button>`;
+}
+
+function renderResult(w){
+  const el = $("result"), r = w.leaf;
+  const crumbs = w.steps.filter(s => s.pick != null).map(s => `<span>${s.node.opts[s.pick].l}</span>`).join("");
+  if (!r){
+    el.className = "panel result wait";
+    el.innerHTML = `<div class="tag">结果</div><p>还差一步。选完左边的问题，这里会显示底薪。</p><div class="path">${crumbs}</div>`;
+    return;
+  }
+  el.className = "panel result " + r.kind;
+  let calc = "";
+  if (r.rate){
+    calc = `<div class="calc">
+      <label for="days">${r.month ? "全月出勤天数" : "实际出勤天数"}<input id="days" type="number" min="0" max="31" inputmode="numeric" value="${r.month ? 26 : 13}"></label>
+      ${r.month ? `<label for="paid">已发金额（₱）<input id="paid" type="number" min="0" inputmode="numeric" value="0"></label>` : ""}
+      <div><span class="tag" id="calcLabel"></span><br><output id="amt"></output></div>
+    </div>`;
+  }
+  el.innerHTML = `
+    <div class="tag">${r.tag}</div>
+    <div class="big">${r.big}</div>
+    <div class="path">${crumbs}</div>
+    <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
+    ${calc}
+    ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
+  if (r.rate) updateCalc(r);
+}
+
+function updateCalc(r){
+  const d = Math.max(0, +$("days").value || 0);
+  let total = d * r.rate, label;
+  if (r.floor && !r.month){ total = Math.max(r.floor, total); label = "这半个月应发（保底₱13,000）"; }
+  else if (r.month){
+    total -= Math.max(0, +$("paid").value || 0);
+    label = "次月15号补发 = 全月应发 − 已发" + (r.bonus ? "，另加奖金 " + fmt(r.bonus) : "");
+  } else label = "这半个月应发";
+  $("calcLabel").textContent = label;
+  $("amt").textContent = fmt(total);
+}
+
+function renderMap(){
+  const t = TREES[cur], p = paths[cur];
+  const build = (node, trail, onPath) => {
+    if (isLeaf(node)) return "";
+    return "<ul>" + node.opts.map((o,j) => {
+      const tr = [...trail, j], on = onPath && p[trail.length] === j, leaf = isLeaf(o.next);
+      const kids = leaf
+        ? `<ul><li><button class="node leaf ${o.next.kind}${on?" on":""}" data-path="${tr.join(",")}"><b>${o.next.big}</b><small>${o.next.tag}</small></button></li></ul>`
+        : build(o.next, tr, on);
+      return `<li><button class="node${on?" on":""}" data-path="${tr.join(",")}"><b>${o.l}</b>${leaf?"":`<small>${o.next.q}</small>`}</button>${kids}</li>`;
+    }).join("") + "</ul>";
+  };
+  $("mapTitle").textContent = "整张导图：" + t.name;
+  $("map").innerHTML = `<ul class="tree"><li><span class="node root"><b>${t.root}</b><small>${t.tree.q}</small></span>${build(t.tree, [], true)}</li></ul>`;
+}
+
+function render(){ const w = walk(); renderTabs(); renderSteps(w); renderResult(w); renderMap(); }
+
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.tab){ cur = b.dataset.tab; render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
+  else if (b.dataset.step){ const i = +b.dataset.step; paths[cur] = paths[cur].slice(0, i); paths[cur][i] = +b.dataset.opt; render(); }
+  else if (b.dataset.path){ paths[cur] = b.dataset.path.split(",").map(Number); render(); }
+  else if (b.id === "reset"){ paths[cur] = []; render(); }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "days" || e.target.id === "paid"){ const w = walk(); if (w.leaf) updateCalc(w.leaf); }
+});
+
+$("dayGrid").innerHTML = Array.from({length:15}, (_,i) => `<div><span>${i+1}</span><b>${Math.round((i+1)*0.8)}</b></div>`).join("");
+render();
+</script>
+</body>
+</html>

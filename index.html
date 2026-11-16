@@ -265,7 +265,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>Repeated unexpected events (emergencies, sudden incidents)</li>
         <li>Other situations that need a specific explanation</li>
       </ol>
-      <p class="note">Limits: long sick leave (1), long family leave (2) and rest to recover (3) can each be used once every three months. Further requests are not approved.</p>
+      <p class="note">Limits: long sick leave (1), long family leave (2) and rest to recover (3) all count as long leave. A host gets one long leave in total every three months. They cannot be combined, and further requests are not approved. Grounds 4 and 5 have no fixed limit and are judged case by case.</p>
     </div>
 
     <div class="panel ref">
@@ -374,7 +374,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"Appeal", desc:"For hosts under 12 days with a special situation", root:"Appeal",
-    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. Long sick leave, long family leave and rest to recover are each limited to once every three months.", opts:[
+    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. Long sick leave, long family leave and rest to recover share one chance every three months.", opts:[
       {l:"Approved", next:{q:"Did the host stream 80% of the remaining days?", hint:"Remaining days = days in the period − approved leave days. Example: 5 days of leave leaves 10 days, so 8 days are required.", opts:[
         {l:"80% or more", next:{q:"New host or regular host?", opts:[
           {l:"New host", s:"Up to and including day 15", next:R.aNew},

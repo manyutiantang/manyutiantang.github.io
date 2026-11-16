@@ -295,7 +295,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     </div>
     <div class="panel ref">
       <h2>How the 20% commission works</h2>
-      <p>20% commission = diamonds ÷ 100 × 50% × 20% × the USD to PHP rate at the time.</p>
+      <p>20% commission = diamonds ÷ 100 × 50% × 20% × the USD to PHP rate. The calculator on this page uses a fixed rate of ₱59 as an estimate. It is for reference only, and the amount actually credited in the backend prevails.</p>
       <div class="tbl"><table>
         <tr><th>Part</th><th>How it is paid</th></tr>
         <tr><td>5% self-withdrawal</td><td>Goes straight to your TikTok balance after each stream</td></tr>
@@ -393,7 +393,8 @@ const TREES = {
 };
 
 // ---------- 状态 ----------
-let cur = "half", diaVal = 100000, fxVal = 62;
+let cur = "half", diaVal = 100000;
+const fxVal = 59;
 const paths = {half:[...TREES.half.start], month:[...TREES.month.start], appeal:[...TREES.appeal.start]};
 const $ = id => document.getElementById(id);
 const fmt = n => (n < 0 ? "−" : "") + "₱" + Math.abs(Math.round(n)).toLocaleString("en-US");
@@ -445,13 +446,12 @@ function renderResult(w){
   if (r.comm){
     calc = `<div class="calc">
       <label for="dia">Diamonds this period<input id="dia" type="number" min="0" step="1000" inputmode="numeric" value="${diaVal}"></label>
-      <label for="fx">USD to PHP rate<input id="fx" type="number" min="1" step="0.1" inputmode="decimal" value="${fxVal}"></label>
       <table class="comm">
         <tr><td>5% TikTok self-withdrawal</td><td class="r" id="cSelf"></td></tr>
         <tr><td id="cCoLabel"></td><td class="r" id="cCo"></td></tr>
         <tr class="sum"><td>Your total</td><td class="r" id="cAll"></td></tr>
       </table>
-      <span class="tag">The rate on payday applies. You can change it here.</span>
+      <span class="tag">Calculated at a fixed rate of US$1 = ₱59. This commission is for reference only. It depends on platform policy and the exchange rate, and the amount actually credited in the backend prevails.</span>
     </div>`;
   }
   el.innerHTML = `
@@ -479,7 +479,7 @@ function updateCalc(r){
 }
 
 function updateComm(r){
-  diaVal = Math.max(0, +$("dia").value || 0); fxVal = Math.max(0, +$("fx").value || 0);
+  diaVal = Math.max(0, +$("dia").value || 0);
   const unit = diaVal / 100 * 0.5 * fxVal, self = unit * 0.05, raw = unit * 0.15;
   const capped = r.cap && raw > r.cap, co = capped ? r.cap : raw;
   $("cSelf").textContent = fmt(self);
@@ -515,7 +515,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("input", e => {
   if (e.target.id === "days" || e.target.id === "paid"){ const w = walk(); if (w.leaf) updateCalc(w.leaf); }
-  if (e.target.id === "dia" || e.target.id === "fx"){ const w = walk(); if (w.leaf && w.leaf.comm) updateComm(w.leaf); }
+  if (e.target.id === "dia"){ const w = walk(); if (w.leaf && w.leaf.comm) updateComm(w.leaf); }
 });
 
 $("dayGrid").innerHTML = Array.from({length:15}, (_,i) => `<div><span>${i+1}</span><b>${Math.round((i+1)*0.8)}</b></div>`).join("");

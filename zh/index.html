@@ -295,7 +295,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     </div>
     <div class="panel ref">
       <h2>20%佣金怎么算</h2>
-      <p>20%佣金 = 钻石数 ÷ 100 × 50% × 20% × 当时的美元兑比索汇率。</p>
+      <p>20%佣金 = 钻石数 ÷ 100 × 50% × 20% × 美元兑比索汇率。本页计算器按固定汇率₱59估算，仅供参考，以后台实际到账金额为准。</p>
       <div class="tbl"><table>
         <tr><th>组成</th><th>怎么拿</th></tr>
         <tr><td>主播自提 5%</td><td>直播结束后直接进你的TikTok账号余额</td></tr>
@@ -393,7 +393,8 @@ const TREES = {
 };
 
 // ---------- 状态 ----------
-let cur = "half", diaVal = 100000, fxVal = 62;
+let cur = "half", diaVal = 100000;
+const fxVal = 59;
 const paths = {half:[...TREES.half.start], month:[...TREES.month.start], appeal:[...TREES.appeal.start]};
 const $ = id => document.getElementById(id);
 const fmt = n => (n < 0 ? "−" : "") + "₱" + Math.abs(Math.round(n)).toLocaleString("en-US");
@@ -445,13 +446,12 @@ function renderResult(w){
   if (r.comm){
     calc = `<div class="calc">
       <label for="dia">这一期的钻石数<input id="dia" type="number" min="0" step="1000" inputmode="numeric" value="${diaVal}"></label>
-      <label for="fx">美元兑比索汇率<input id="fx" type="number" min="1" step="0.1" inputmode="decimal" value="${fxVal}"></label>
       <table class="comm">
         <tr><td>TikTok自提 5%</td><td class="r" id="cSelf"></td></tr>
         <tr><td id="cCoLabel"></td><td class="r" id="cCo"></td></tr>
         <tr class="sum"><td>你一共拿到</td><td class="r" id="cAll"></td></tr>
       </table>
-      <span class="tag">汇率以发薪时为准，这里可以自己改。</span>
+      <span class="tag">按固定汇率 1美元 = ₱59 计算。该佣金仅供参考，受平台政策和汇率影响，以后台实际到账金额为准。</span>
     </div>`;
   }
   el.innerHTML = `
@@ -479,7 +479,7 @@ function updateCalc(r){
 }
 
 function updateComm(r){
-  diaVal = Math.max(0, +$("dia").value || 0); fxVal = Math.max(0, +$("fx").value || 0);
+  diaVal = Math.max(0, +$("dia").value || 0);
   const unit = diaVal / 100 * 0.5 * fxVal, self = unit * 0.05, raw = unit * 0.15;
   const capped = r.cap && raw > r.cap, co = capped ? r.cap : raw;
   $("cSelf").textContent = fmt(self);
@@ -515,7 +515,7 @@ document.addEventListener("click", e => {
 });
 document.addEventListener("input", e => {
   if (e.target.id === "days" || e.target.id === "paid"){ const w = walk(); if (w.leaf) updateCalc(w.leaf); }
-  if (e.target.id === "dia" || e.target.id === "fx"){ const w = walk(); if (w.leaf && w.leaf.comm) updateComm(w.leaf); }
+  if (e.target.id === "dia"){ const w = walk(); if (w.leaf && w.leaf.comm) updateComm(w.leaf); }
 });
 
 $("dayGrid").innerHTML = Array.from({length:15}, (_,i) => `<div><span>${i+1}</span><b>${Math.round((i+1)*0.8)}</b></div>`).join("");

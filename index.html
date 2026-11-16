@@ -265,6 +265,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>Repeated unexpected events (emergencies, sudden incidents)</li>
         <li>Other situations that need a specific explanation</li>
       </ol>
+      <p class="note">Limits: long sick leave (1), long family leave (2) and rest to recover (3) can each be used once every three months. Further requests are not approved.</p>
     </div>
 
     <div class="panel ref">
@@ -299,7 +300,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <ul>
         <li>Base pay and commission are either-or: with base pay the company's 15% is not paid, and the 5% TikTok withdrawal is still yours.</li>
-        <li>When attendance is not met, the company-paid part is capped at ₱11,000 per half-month.</li>
+        <li>When attendance is not met, the company-paid part is capped at ₱10,000 per half-month.</li>
         <li>Any later back pay is reduced by commission the company already paid.</li>
       </ul>
     </div>
@@ -319,8 +320,8 @@ const R = {
   k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K tier rate",rate:1000,lines:["Pay = days streamed × ₱1,000","No cap: 15 days pays ₱15,000"]},
   k13:{big:"₱13,000+",kind:"top",tag:"300K+ tier, attendance not required",rate:1000,floor:13000,lines:["₱13,000 is guaranteed, even with only 1 day streamed","Each day beyond 13 adds ₱1,000. 15 days pays ₱15,000","This half-month is first paid at ₱1,000/day. A raise applies from 500K diamonds in the full month, and the difference is settled after the month ends"],jump:[["month","See the monthly raise"]]},
   pctTrial:{big:PCT,kind:"pct",tag:"Trial not passed",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%"]},
-  pct:{big:PCT,kind:"pct",tag:"Attendance not met this half-month",lines:["No daily rate this half-month. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱11,000 per half-month","You can appeal if there is a special situation","Catch up over the full month to get back pay"],jump:[["appeal","Go to appeal"],["month","See monthly back pay"]]},
-  pctAppeal:{big:PCT,kind:"pct",tag:"Still commission after appeal",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱11,000 per half-month","Back pay is still possible if the full month qualifies. See monthly back pay and raise"],jump:[["month","See monthly back pay"]]},
+  pct:{big:PCT,kind:"pct",tag:"Attendance not met this half-month",lines:["No daily rate this half-month. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","You can appeal if there is a special situation","Catch up over the full month to get back pay"],jump:[["appeal","Go to appeal"],["month","See monthly back pay"]]},
+  pctAppeal:{big:PCT,kind:"pct",tag:"Still commission after appeal",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","Back pay is still possible if the full month qualifies. See monthly back pay and raise"],jump:[["month","See monthly back pay"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"Fewer than 24 days in the month",lines:["Month diamonds are below 600K and attendance is under 24 days, so there is no back pay","Half-month pay already issued stays the same","The ₱13,000 guarantee for a 300K+ half-month is not affected"]},
   noDia:{big:NOPAY,kind:"none",tag:"Month diamonds below 160K",lines:["Month diamonds did not reach 160K, so there is no back pay","Half-month pay already issued stays the same"]},
   m755:{big:"₱755"+PER,kind:"day",tag:"Full-month back pay",rate:755,month:true,lines:["Month pay due = days streamed in the month × ₱755",ONLYUP]},
@@ -373,7 +374,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"Appeal", desc:"For hosts under 12 days with a special situation", root:"Appeal",
-    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required.", opts:[
+    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. Long sick leave, long family leave and rest to recover are each limited to once every three months.", opts:[
       {l:"Approved", next:{q:"Did the host stream 80% of the remaining days?", hint:"Remaining days = days in the period − approved leave days. Example: 5 days of leave leaves 10 days, so 8 days are required.", opts:[
         {l:"80% or more", next:{q:"New host or regular host?", opts:[
           {l:"New host", s:"Up to and including day 15", next:R.aNew},

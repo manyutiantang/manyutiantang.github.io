@@ -265,6 +265,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>多次出现意外情况（紧急情况、突发事件）</li>
         <li>其他需特别说明的情况</li>
       </ol>
+      <p class="note">次数限制：第1条长病假、第2条长事假、第3条休息调整，每三个月各可申请一次，超出不批准。</p>
     </div>
 
     <div class="panel ref">
@@ -299,7 +300,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <ul>
         <li>底薪和佣金二选一：拿底薪就不发公司的15%佣金，TikTok自提的5%照常归你。</li>
-        <li>出勤不达标拿佣金时，公司发放的部分每半月最多₱11,000。</li>
+        <li>出勤不达标拿佣金时，公司发放的部分每半月最多₱10,000。</li>
         <li>之后拿到补发时，要减去公司已发的佣金。</li>
       </ul>
     </div>
@@ -319,8 +320,8 @@ const R = {
   k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K档日薪",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","上不封顶：播15天发₱15,000"]},
   k13:{big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","这半个月先按₱1,000/天发。全月钻石到500K以上有加薪，差额全月播完后结算"],jump:[["month","看全月加薪"]]},
   pctTrial:{big:PCT,kind:"pct",tag:"未通过试用",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%"]},
-  pct:{big:PCT,kind:"pct",tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱11,000","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
-  pctAppeal:{big:PCT,kind:"pct",tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱11,000","全月达标仍可补发，见全月补发与加薪"],jump:[["month","看全月补发"]]},
+  pct:{big:PCT,kind:"pct",tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
+  pctAppeal:{big:PCT,kind:"pct",tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","全月达标仍可补发，见全月补发与加薪"],jump:[["month","看全月补发"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"全月出勤不满24天",lines:["全月钻石不到600K，又没播满24天，不补发","已经发的半月工资不变","半月钻石300K以上的₱13,000保底不受影响"]},
   noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变"]},
   m755:{big:"₱755"+PER,kind:"day",tag:"全月补发",rate:755,month:true,lines:["全月应发 = 全月出勤天数 × ₱755",ONLYUP]},
@@ -373,7 +374,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"申诉", desc:"出勤不满12天、有特殊情况时用", root:"申诉",
-    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。", opts:[
+    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。长病假、长事假、休息调整每三个月各限一次。", opts:[
       {l:"通过", next:{q:"剩余天数里出勤满80%吗？", hint:"剩余天数 = 本期天数 − 批准的请假天数。例：请假5天，剩10天，需出勤8天。", opts:[
         {l:"满80%", next:{q:"新主播还是老主播？", opts:[
           {l:"新主播", s:"入职15天内，含第15天", next:R.aNew},

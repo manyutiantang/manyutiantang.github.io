@@ -286,7 +286,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <p>New hosts get ₱923/day, with no daily-average check. Regular hosts are matched to a tier by daily average diamonds, then paid for the days actually streamed.</p>
       <div class="tbl"><table>
         <tr><th>Matching tier</th><th class="r">Daily average</th><th class="r">Regular host rate</th></tr>
-        <tr><td>Below the 80K tier</td><td class="r">Below 7K</td><td class="r">20% commission</td></tr>
+        <tr><td>Below the 80K tier</td><td class="r">Below 7K</td><td class="r">₱755/day</td></tr>
         <tr><td>80K tier</td><td class="r">7K–13K</td><td class="r">₱755/day</td></tr>
         <tr><td>150K tier</td><td class="r">13K–26K</td><td class="r">₱1,000/day</td></tr>
         <tr><td>300K tier</td><td class="r">26K and above</td><td class="r">₱1,000/day</td></tr>
@@ -335,6 +335,7 @@ const R = {
   g30a:{big:"₱30,000+ and ₱15,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱15,000 bonus, paid on the 15th",ONLYUP]},
   g30b:{big:"₱30,000+ and ₱20,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱20,000 bonus, paid on the 15th",ONLYUP]},
   aNew:{big:"₱923"+PER,kind:"day",tag:"New host appeal approved, no daily-average check",rate:923,lines:["Pay = days streamed × ₱923"]},
+  a755low:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, below the 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
   a1k:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 150K tier",rate:1000,lines:["Pay = days streamed × ₱1,000"]},
   a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 300K tier",rate:1000,lines:["Pay = days streamed × ₱1,000","If the half-month total reaches 300K, ₱13,000+ applies instead"]}
@@ -382,7 +383,7 @@ const TREES = {
         {l:"80% or more", next:{q:"New host or regular host?", opts:[
           {l:"New host", s:"Up to and including day 15", next:R.aNew},
           {l:"Regular host", s:"More than 15 days on board", next:{q:"What is the daily average of diamonds?", hint:"Daily average = half-month diamonds ÷ days streamed.", opts:[
-            {l:"Below 7K", next:R.pctAppeal},
+            {l:"Below 7K", next:R.a755low},
             {l:"7K–13K", next:R.a755},
             {l:"13K–26K", next:R.a1k},
             {l:"26K and above", next:R.a1kTop}]}}]}},

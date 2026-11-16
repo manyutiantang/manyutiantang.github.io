@@ -286,7 +286,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <p>新主播申诉成功，不看日均，按₱923/天。老主播用日均钻石对档，再乘以实际出勤天数。</p>
       <div class="tbl"><table>
         <tr><th>对应半月档</th><th class="r">日均钻石</th><th class="r">老主播日薪</th></tr>
-        <tr><td>不到80K档</td><td class="r">低于7K</td><td class="r">20%佣金</td></tr>
+        <tr><td>不到80K档</td><td class="r">低于7K</td><td class="r">₱755/天</td></tr>
         <tr><td>80K档</td><td class="r">7K–13K</td><td class="r">₱755/天</td></tr>
         <tr><td>150K档</td><td class="r">13K–26K</td><td class="r">₱1,000/天</td></tr>
         <tr><td>300K档</td><td class="r">26K及以上</td><td class="r">₱1,000/天</td></tr>
@@ -335,6 +335,7 @@ const R = {
   g30a:{big:"₱30,000+ 和 ₱15,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱15,000，每月15号发放",ONLYUP]},
   g30b:{big:"₱30,000+ 和 ₱20,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱20,000，每月15号发放",ONLYUP]},
   aNew:{big:"₱923"+PER,kind:"day",tag:"新主播申诉通过，不看日均",rate:923,lines:["发放 = 实际出勤天数 × ₱923"]},
+  a755low:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K以下档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
   a1k:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，150K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000"]},
   a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，300K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","半月钻石合计到300K的，直接按₱13,000+发"]}
@@ -382,7 +383,7 @@ const TREES = {
         {l:"满80%", next:{q:"新主播还是老主播？", opts:[
           {l:"新主播", s:"入职15天内，含第15天", next:R.aNew},
           {l:"老主播", s:"入职超过15天", next:{q:"日均钻石是多少？", hint:"日均 = 半月钻石 ÷ 实际出勤天数。", opts:[
-            {l:"低于7K", next:R.pctAppeal},
+            {l:"低于7K", next:R.a755low},
             {l:"7K–13K", next:R.a755},
             {l:"13K–26K", next:R.a1k},
             {l:"26K及以上", next:R.a1kTop}]}}]}},

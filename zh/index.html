@@ -354,6 +354,7 @@ const R = {
 };
 
 // ---------- 三棵树 ----------
+R.old755low = {...R.old755, contract:true};
 const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
 const dia = isNew => {
   const base = isNew ? R.new923 : R.old755;
@@ -363,7 +364,7 @@ const dia = isNew => {
   const low = isNew
     ? [{l:"低于3K/天", s:"日均钻石", next:R.pctNewLow},
        {l:"3K–7K/天", s:"日均钻石", next:a(base)}]
-    : [{l:"低于80K", next:a(base)}];
+    : [{l:"低于80K", next:a(R.old755low)}];
   return {q:"这半个月的钻石是多少？", hint: isNew ? "日均钻石 = 半月钻石 ÷ 实际出勤天数。" : undefined, opts:[
     ...low,
     {l:"80K–150K", s:"含80K，不含150K", next:a(base)},
@@ -476,7 +477,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
-    ${(r.kind === "day" || r.kind === "top") ? `<div class="contract">请与你的HR确认你是否签署了带底薪的合同，佣金合同主播不适用该选项。</div>` : ""}
+    ${r.contract ? `<div class="contract">请与你的HR确认你是否签署了带底薪的合同，佣金合同主播不适用该选项。</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
   if (r.rate) updateCalc(r);

@@ -94,6 +94,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .comm td{padding:5px 0;border-bottom:1px solid var(--line)}
 .comm .sum td{border-bottom:none;font-weight:700}
 .comm .sum td.r{font-family:var(--font-num);font-size:24px;color:var(--pct)}
+.contract{background:var(--pct-soft);color:var(--ink);border-left:4px solid var(--pct);border-radius:6px;padding:8px 12px;font-size:14px;font-weight:500}
 .jump{display:flex;flex-wrap:wrap;gap:8px}
 .jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
 
@@ -475,6 +476,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
+    ${(r.kind === "day" || r.kind === "top") ? `<div class="contract">Please confirm with your HR that you signed a contract with base pay. This does not apply to hosts on a commission contract.</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
   if (r.rate) updateCalc(r);

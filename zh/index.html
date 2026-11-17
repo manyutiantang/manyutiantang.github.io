@@ -209,7 +209,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <p>出勤达标后，播几天发几天。播12天发12天的日薪，播15天发15天的日薪。</p>
       <div class="tbl"><table>
         <tr><th>半月钻石</th><th>主播</th><th class="r">日薪</th></tr>
-        <tr><td>低于150K</td><td>新主播（新手保护期）</td><td class="r">₱923/天</td></tr>
+        <tr><td>日均3K以上，低于150K</td><td>新主播（新手保护期）</td><td class="r">₱923/天</td></tr>
         <tr><td>低于150K</td><td>老主播</td><td class="r">₱755/天</td></tr>
         <tr><td>150K–300K</td><td>全部主播</td><td class="r">₱1,000/天</td></tr>
         <tr><td>300K及以上</td><td>全部主播</td><td class="r">₱13,000+</td></tr>
@@ -322,6 +322,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 <script>
 const PER = "/天";
 const PCT = "20%佣金";
+const CAP_LINE = "20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000";
 const NOPAY = "不补发";
 const ONLYUP = "次月15号补发 = 全月应发 − 已发金额。只补不扣，算出来低于已发就不补发";
 // ---------- 结果 ----------
@@ -333,6 +334,7 @@ const R = {
   k13:{big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","这半个月先按₱1,000/天发。全月钻石到500K以上有加薪，差额全月播完后结算"],jump:[["month","看全月加薪"]]},
   pctTrial:{big:PCT,kind:"pct",comm:true,tag:"未通过试用",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%"]},
   pct:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
+  pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"新主播日均低于3K",lines:["日均钻石不到3K，不发新手保护期日薪，只按20%佣金结算",CAP_LINE,"全月追上来还能补发日薪"],jump:[["month","看全月补发"]]},
   pctAppeal:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","全月达标仍可补发，见全月补发与加薪"],jump:[["month","看全月补发"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"全月出勤不满24天",lines:["全月钻石不到600K，又没播满24天，不补发","已经发的半月工资不变","半月钻石300K以上的₱13,000保底不受影响"]},
   noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变"]},
@@ -357,8 +359,12 @@ const dia = isNew => {
   const a = r => isNew
     ? att(r,"达标","未达标","出勤达到应出勤天数了吗？","应出勤天数 = 在职天数（含入职当天）× 80%，四舍五入。见下方对照表。")
     : att(r,"满12天","不满12天","这半个月出勤满12天吗？","12天 = 15天 × 80%。");
-  return {q:"这半个月的钻石是多少？", opts:[
-    {l:"低于80K", next:a(base)},
+  const low = isNew
+    ? [{l:"低于3K/天", s:"日均钻石", next:R.pctNewLow},
+       {l:"3K–7K/天", s:"日均钻石", next:a(base)}]
+    : [{l:"低于80K", next:a(base)}];
+  return {q:"这半个月的钻石是多少？", hint: isNew ? "日均钻石 = 半月钻石 ÷ 实际出勤天数。" : undefined, opts:[
+    ...low,
     {l:"80K–150K", s:"含80K，不含150K", next:a(base)},
     {l:"150K–300K", s:"含150K，不含300K", next:a(R.k1)},
     {l:"300K及以上", next:R.k13}

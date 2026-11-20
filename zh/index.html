@@ -139,6 +139,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .pill{display:inline-block;border-radius:999px;padding:1px 10px;font-size:13px;font-weight:500}
 .pill.off{background:var(--none-soft);color:var(--none)}
 .pill.keep{background:var(--day-soft);color:var(--day)}
+.pill{white-space:nowrap}
+.pdesc{display:block;margin-top:4px;font-size:13px;color:var(--muted);line-height:1.4}
 .days{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
 .days div{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .days div b{font-family:var(--font-num);font-size:16px}
@@ -254,11 +256,11 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <div class="tbl"><table>
         <tr><th>项目</th><th>新制度</th></tr>
         <tr><td>全勤奖</td><td><span class="pill off">取消</span></td></tr>
-        <tr><td>辛苦奖</td><td><span class="pill keep">恢复：全月出勤满28天奖励₱4,000，不分钻石档位</span></td></tr>
-        <tr><td>业绩达成奖</td><td><span class="pill keep">参考加薪阶梯</span></td></tr>
+        <tr><td>辛苦奖</td><td><span class="pill keep">₱4,000</span><span class="pdesc">全月出勤满28天，不分钻石档位</span></td></tr>
+        <tr><td>业绩达成奖</td><td><span class="pill keep">保留</span><span class="pdesc">参考加薪阶梯</span></td></tr>
         <tr><td>老主播加薪</td><td><span class="pill off">取消</span></td></tr>
         <tr><td>底薪</td><td><span class="pill keep">上不封顶</span></td></tr>
-        <tr><td>加薪</td><td><span class="pill keep">保留，按加薪阶梯</span></td></tr>
+        <tr><td>加薪</td><td><span class="pill keep">保留</span><span class="pdesc">按加薪阶梯</span></td></tr>
       </table></div>
     </div>
 

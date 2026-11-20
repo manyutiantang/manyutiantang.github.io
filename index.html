@@ -468,7 +468,7 @@ function renderResult(w){
   let calc = "";
   if (r.rate){
     calc = `<div class="calc">
-      <label for="days">${r.month ? "Days streamed in the month" : "Days streamed"}<input id="days" type="number" min="0" max="31" inputmode="numeric" value="${r.month ? 26 : 13}"></label>
+      <label for="days">${r.month ? "Days streamed in the month" : "Days streamed"}<input id="days" type="number" min="0" max="${r.month ? 31 : 16}" inputmode="numeric" value="${r.month ? 26 : 13}"></label>
       ${r.month ? `<label for="paid">Already paid (₱)<input id="paid" type="number" min="0" inputmode="numeric" value="0"></label>` : ""}
       <div><span class="tag" id="calcLabel"></span><br><output id="amt"></output></div>
     </div>`;
@@ -498,7 +498,9 @@ function renderResult(w){
 }
 
 function updateCalc(r){
-  const d = Math.max(0, +$("days").value || 0);
+  const max = r.month ? 31 : 16, inp = $("days");
+  let d = Math.max(0, Math.floor(+inp.value || 0));
+  if (d > max){ d = max; inp.value = max; }
   let total = d * r.rate, label;
   if (r.floor && !r.month){ total = Math.max(r.floor, total); label = "Pay due this half-month (₱13,000 guaranteed)"; }
   else if (r.month){

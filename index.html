@@ -95,6 +95,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .comm .sum td{border-bottom:none;font-weight:700}
 .comm .sum td.r{font-family:var(--font-num);font-size:24px;color:var(--pct)}
 .contract{background:var(--pct-soft);color:var(--ink);border-left:4px solid var(--pct);border-radius:6px;padding:8px 12px;font-size:14px;font-weight:500}
+.raise{background:var(--accent-soft);color:var(--ink);border-left:4px solid var(--accent);border-radius:6px;padding:8px 12px;font-size:14px}
 .jump{display:flex;flex-wrap:wrap;gap:8px}
 .jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
 
@@ -251,8 +252,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <div class="tbl"><table>
         <tr><th>Item</th><th>New policy</th></tr>
         <tr><td>Perfect attendance bonus</td><td><span class="pill off">Removed</span></td></tr>
-        <tr><td>Hard work bonus</td><td><span class="pill off">Removed</span></td></tr>
-        <tr><td>Target achievement bonus</td><td><span class="pill off">Removed</span></td></tr>
+        <tr><td>Hard work bonus</td><td><span class="pill keep">Back: ₱4,000 for 28 days of attendance in the month</span></td></tr>
+        <tr><td>Target achievement bonus</td><td><span class="pill keep">See raise ladder</span></td></tr>
         <tr><td>Seniority raise</td><td><span class="pill off">Removed</span></td></tr>
         <tr><td>Base pay</td><td><span class="pill keep">No cap</span></td></tr>
         <tr><td>Raise</td><td><span class="pill keep">Kept, see raise ladder</span></td></tr>
@@ -269,7 +270,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>Repeated unexpected events (emergencies, sudden incidents)</li>
         <li>Other situations that need a specific explanation</li>
       </ol>
-      <p class="note">Limits: long sick leave (1), long family leave (2) and rest to recover (3) all count as long leave. A host gets one long leave in total every three months. They cannot be combined, and further requests are not approved. Grounds 4 and 5 have no fixed limit and are judged case by case.</p>
+      <p class="note">Limit: all 5 grounds together allow one appeal every three months. They cannot be combined, and further requests are not approved.</p>
     </div>
 
     <div class="panel ref">
@@ -309,13 +310,21 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </ul>
     </div>
     <div class="panel ref">
-      <h2>Deduction: late start</h2>
-      <p>Your stream time must be fixed. Start on time at the scheduled hour.</p>
+      <h2>Deductions: late start, early end, split streams</h2>
+      <p>Your stream time must be fixed: start on time and stream the full scheduled length. Each minute is ₱3.</p>
       <div class="tbl"><table>
         <tr><th>Situation</th><th>What happens</th></tr>
-        <tr><td>Starting up to 10 minutes late</td><td>Not counted as late, no deduction</td></tr>
-        <tr><td>Starting more than 10 minutes late</td><td>Counted as late, ₱3 deducted per minute late</td></tr>
+        <tr><td>Late: up to 10 minutes after the start time</td><td>Not counted as late, no deduction</td></tr>
+        <tr><td>Late: more than 10 minutes after the start time</td><td>₱3 per minute late</td></tr>
+        <tr><td>Early end: up to 30 minutes short</td><td>₱3 per minute short. Example: 5 h 45 min on a 6-hour schedule, 15 × ₱3 = ₱45</td></tr>
+        <tr><td>Early end: more than 30 minutes short</td><td>Counted as an invalid stream</td></tr>
+        <tr><td>Split stream: streaming in two parts</td><td>Counted as an invalid stream unless the team specially approved it. Example: 4 h morning + 2 h evening, or 3 h + 3 h</td></tr>
       </table></div>
+      <ul>
+        <li>The split stream rule applies from November 16.</li>
+        <li>At payroll, split streams are first counted as invalid. If the team approved yours, bring the approval to the team to have it settled again.</li>
+        <li>A stream cut off by an unexpected event also counts as a split stream. Keep your proof and apply through the appeal process.</li>
+      </ul>
     </div>
   </section>
 </div>
@@ -328,24 +337,24 @@ const NOPAY = "No back pay";
 const ONLYUP = "Back pay on the 15th = month pay due − amount already paid. It only tops up: if the result is below what was paid, nothing is deducted";
 // ---------- 结果 ----------
 const R = {
-  new923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["Pay = days streamed × ₱923","No cap: every day streamed is paid"]},
+  new923:{raise:true,big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["Pay = days streamed × ₱923","No cap: every day streamed is paid"],jump:[["month","See monthly back pay and raise"]]},
   trial923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["HR decides whether the trial is passed. Attendance is not a requirement","Pay = days streamed during the trial × ₱923","If half-month diamonds reach 150K or 300K, the regular host tier applies when it pays more","Days after the trial are settled separately under the new host attendance rule"]},
-  old755:{big:"₱755"+PER,kind:"day",tag:"Regular host rate",rate:755,lines:["Pay = days streamed × ₱755","No cap: 12 days pays 12 days, 15 days pays 15 days"]},
-  k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K tier rate",rate:1000,lines:["Pay = days streamed × ₱1,000","No cap: 15 days pays ₱15,000"]},
-  k13:{big:"₱13,000+",kind:"top",tag:"300K+ tier, attendance not required",rate:1000,floor:13000,lines:["₱13,000 is guaranteed, even with only 1 day streamed","Each day beyond 13 adds ₱1,000. 15 days pays ₱15,000","This half-month is first paid at ₱1,000/day. A raise applies from 500K diamonds in the full month, and the difference is settled after the month ends"],jump:[["month","See the monthly raise"]]},
+  old755:{raise:true,big:"₱755"+PER,kind:"day",tag:"Regular host rate",rate:755,lines:["Pay = days streamed × ₱755","No cap: 12 days pays 12 days, 15 days pays 15 days"],jump:[["month","See monthly back pay and raise"]]},
+  k1:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"150K–300K tier rate",rate:1000,lines:["Pay = days streamed × ₱1,000","No cap: 15 days pays ₱15,000"],jump:[["month","See monthly back pay and raise"]]},
+  k13:{raise:true,big:"₱13,000+",kind:"top",tag:"300K+ tier, attendance not required",rate:1000,floor:13000,lines:["₱13,000 is guaranteed, even with only 1 day streamed","Each day beyond 13 adds ₱1,000. 15 days pays ₱15,000","This half-month is first paid at ₱1,000/day"],jump:[["month","See the monthly raise"]]},
   pctTrial:{big:PCT,kind:"pct",comm:true,tag:"Trial not passed",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%"]},
   pct:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"Attendance not met this half-month",lines:["No daily rate this half-month. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","You can appeal if there is a special situation","Catch up over the full month to get back pay"],jump:[["appeal","Go to appeal"],["month","See monthly back pay"]]},
   pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"New host, daily average below 3K",lines:["With a daily average below 3K, the newcomer rate does not apply. Pay is 20% commission only",CAP_LINE,"Catch up over the full month to get back pay"],jump:[["month","See monthly back pay"]]},
   pctAppeal:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"Still commission after appeal",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","Back pay is still possible if the full month qualifies. See monthly back pay and raise"],jump:[["month","See monthly back pay"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"Fewer than 24 days in the month",lines:["Month diamonds are below 600K and attendance is under 24 days, so there is no back pay","Half-month pay already issued stays the same","The ₱13,000 guarantee for a 300K+ half-month is not affected"]},
-  noDia:{big:NOPAY,kind:"none",tag:"Month diamonds below 160K",lines:["Month diamonds did not reach 160K, so there is no back pay","Half-month pay already issued stays the same"]},
-  m755:{big:"₱755"+PER,kind:"day",tag:"Full-month back pay",rate:755,month:true,lines:["Month pay due = days streamed in the month × ₱755",ONLYUP]},
-  r26:{big:"₱1,000"+PER,kind:"top",tag:"₱26,000 monthly base tier",rate:1000,month:true,lines:["Month pay due = days streamed in the month × ₱1,000 (₱26,000 ÷ 26 days)",ONLYUP]},
-  r28:{big:"₱1,077"+PER,kind:"top",tag:"₱28,000 monthly base tier",rate:28000/26,month:true,lines:["Month pay due = days streamed in the month × ₱1,077 (₱28,000 ÷ 26 days)","From 600K diamonds in the month, attendance is not required and ₱28,000 is guaranteed",ONLYUP]},
-  g28:{big:"₱28,000+",kind:"top",tag:"Monthly guarantee, attendance not required",rate:28000/26,floor:28000,month:true,lines:["The full monthly base of ₱28,000 is guaranteed, however many days were streamed","Each day beyond 26 adds ₱1,077",ONLYUP]},
-  g30:{big:"₱30,000+",kind:"top",tag:"Monthly guarantee, attendance not required",rate:30000/26,floor:30000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed, however many days were streamed","Each day beyond 26 adds ₱1,154",ONLYUP]},
-  g30a:{big:"₱30,000+ and ₱15,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱15,000 bonus, paid on the 15th",ONLYUP]},
-  g30b:{big:"₱30,000+ and ₱20,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱20,000 bonus, paid on the 15th",ONLYUP]},
+  noDia:{big:NOPAY,kind:"none",tag:"Month diamonds below 160K",lines:["Month diamonds did not reach 160K, so there is no back pay","Half-month pay already issued stays the same","28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  m755:{big:"₱755"+PER,kind:"day",tag:"Full-month back pay",rate:755,month:true,lines:["Month pay due = days streamed in the month × ₱755",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  r26:{big:"₱1,000"+PER,kind:"top",tag:"₱26,000 monthly base tier",rate:1000,month:true,lines:["Month pay due = days streamed in the month × ₱1,000 (₱26,000 ÷ 26 days)",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  r28:{big:"₱1,077"+PER,kind:"top",tag:"₱28,000 monthly base tier",rate:28000/26,month:true,lines:["Month pay due = days streamed in the month × ₱1,077 (₱28,000 ÷ 26 days)","From 600K diamonds in the month, attendance is not required and ₱28,000 is guaranteed",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  g28:{big:"₱28,000+",kind:"top",tag:"Monthly guarantee, attendance not required",rate:28000/26,floor:28000,month:true,lines:["The full monthly base of ₱28,000 is guaranteed, however many days were streamed","Each day beyond 26 adds ₱1,077",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  g30:{big:"₱30,000+",kind:"top",tag:"Monthly guarantee, attendance not required",rate:30000/26,floor:30000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed, however many days were streamed","Each day beyond 26 adds ₱1,154",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  g30a:{big:"₱30,000+ and ₱15,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱15,000 bonus, paid on the 15th",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
+  g30b:{big:"₱30,000+ and ₱20,000",kind:"top",tag:"Monthly guarantee + bonus, attendance not required",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["The full monthly base of ₱30,000 is guaranteed. Each day beyond 26 adds ₱1,154","Plus a ₱20,000 bonus, paid on the 15th",ONLYUP,"28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
   aNew:{big:"₱923"+PER,kind:"day",tag:"New host appeal approved, no daily-average check",rate:923,lines:["Pay = days streamed × ₱923"]},
   a755low:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, below the 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
@@ -374,7 +383,7 @@ const dia = isNew => {
 };
 const att24 = ok => ({q:"Did the host stream 24 days in the month?", hint:"This is the month total. Each half does not need 12 days on its own.", opts:[{l:"24 days or more", next:ok},{l:"Fewer than 24 days", next:R.noMonth}]});
 const TREES = {
-  half:{name:"Half-month base pay", desc:"Use at every half-month settlement", root:"Half-month base pay",
+  half:{name:"Half-month base pay", desc:"Use at every half-month settlement. Raises not included", root:"Half-month base pay",
     tree:{q:"Which stage is the host in?", opts:[
       {l:"Trial", s:"First 7 days", next:{q:"Did the host pass the 7-day trial?", hint:"HR decides. A strong host with low attendance for good reasons (even under 5 days) can still pass.", opts:[
         {l:"Passed", next:R.trial923},{l:"Not passed", next:R.pctTrial}]}},
@@ -382,8 +391,8 @@ const TREES = {
       {l:"Regular host", s:"More than 15 days on board", next:dia(false)}
     ]},
     start:[2,1,0]},
-  month:{name:"Monthly back pay and raise", desc:"Use after the month ends, paid on the 15th", root:"Monthly settlement",
-    tree:{q:"Total diamonds for the full month?", hint:"Add both half-months together. From 600K, attendance is not required.", opts:[
+  month:{name:"Monthly back pay and raise", desc:"Use after the month ends. Includes raises and back pay, paid on the 15th", root:"Monthly settlement",
+    tree:{q:"Total diamonds for the full month?", hint:"Add both half-months together. From 600K, attendance is not required. Month pay due minus the base pay or commission already paid for both half-months is the back pay or raise difference.", opts:[
       {l:"Below 160K", next:R.noDia},
       {l:"160K–300K", next:att24(R.m755)},
       {l:"300K–500K", next:att24(R.r26)},
@@ -395,7 +404,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"Appeal", desc:"For hosts on 20% commission with a special situation", root:"Appeal",
-    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. Long sick leave, long family leave and rest to recover share one chance every three months.", opts:[
+    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. All appeals together are limited to once every three months.", opts:[
       {l:"Approved", next:{q:"Did the host stream 80% of the remaining days?", hint:"Remaining days = days in the period − approved leave days. Example: 5 days of leave leaves 10 days, so 8 days are required.", opts:[
         {l:"80% or more", next:{q:"New host or regular host?", opts:[
           {l:"New host", s:"Up to and including day 15", next:R.aNew},
@@ -477,6 +486,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
+    ${r.raise ? `<div class="raise">This is only the base pay for this half-month and does not include any raise. At the monthly settlement, total diamonds for the month set the tier again: from 300K the raise ladder applies (₱1,077/day from 500K, full monthly base guaranteed from 600K), and the difference is paid on the 15th of the next month. See Monthly back pay and raise for the amount.</div>` : ""}
     ${r.contract ? `<div class="contract">Please confirm with your HR that you signed a contract with base pay. This does not apply to hosts on a commission contract.</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
@@ -492,6 +502,7 @@ function updateCalc(r){
     if (r.floor) total = Math.max(r.floor, total);
     total = Math.max(0, total - Math.max(0, +$("paid").value || 0));
     label = "Back pay on the 15th = month pay due − already paid (top-up only)" + (r.bonus ? ", plus bonus " + fmt(r.bonus) : "");
+    if (d >= 28){ total += 4000; label += ", including the ₱4,000 hard work bonus"; }
   } else label = "Pay due this half-month";
   $("calcLabel").textContent = label;
   $("amt").textContent = fmt(total);

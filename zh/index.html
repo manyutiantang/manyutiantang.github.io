@@ -95,6 +95,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .comm .sum td{border-bottom:none;font-weight:700}
 .comm .sum td.r{font-family:var(--font-num);font-size:24px;color:var(--pct)}
 .contract{background:var(--pct-soft);color:var(--ink);border-left:4px solid var(--pct);border-radius:6px;padding:8px 12px;font-size:14px;font-weight:500}
+.raise{background:var(--accent-soft);color:var(--ink);border-left:4px solid var(--accent);border-radius:6px;padding:8px 12px;font-size:14px}
 .jump{display:flex;flex-wrap:wrap;gap:8px}
 .jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
 
@@ -251,8 +252,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <div class="tbl"><table>
         <tr><th>项目</th><th>新制度</th></tr>
         <tr><td>全勤奖</td><td><span class="pill off">取消</span></td></tr>
-        <tr><td>辛苦奖</td><td><span class="pill off">取消</span></td></tr>
-        <tr><td>业绩达成奖</td><td><span class="pill off">取消</span></td></tr>
+        <tr><td>辛苦奖</td><td><span class="pill keep">恢复：全月出勤满28天奖励₱4,000</span></td></tr>
+        <tr><td>业绩达成奖</td><td><span class="pill keep">参考加薪阶梯</span></td></tr>
         <tr><td>老主播加薪</td><td><span class="pill off">取消</span></td></tr>
         <tr><td>底薪</td><td><span class="pill keep">上不封顶</span></td></tr>
         <tr><td>加薪</td><td><span class="pill keep">保留，按加薪阶梯</span></td></tr>
@@ -269,7 +270,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>多次出现意外情况（紧急情况、突发事件）</li>
         <li>其他需特别说明的情况</li>
       </ol>
-      <p class="note">次数限制：第1条长病假、第2条长事假、第3条休息调整都算长假，三类合计每三个月只有一次机会，不能叠加，超出不批准。第4条和第5条次数不限，看主播的具体情况。</p>
+      <p class="note">次数限制：以上5条合计，每三个月只有一次申诉机会，不能叠加，超出不批准。</p>
     </div>
 
     <div class="panel ref">
@@ -309,13 +310,21 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </ul>
     </div>
     <div class="panel ref">
-      <h2>扣减项：迟到</h2>
-      <p>直播时间必须固定，按排定的时间准时开播。</p>
+      <h2>扣减项：迟到、早退、中断直播</h2>
+      <p>直播时间必须固定，按排定的时间准时开播、播满时长。每1分钟按₱3扣减。</p>
       <div class="tbl"><table>
         <tr><th>情况</th><th>怎么算</th></tr>
-        <tr><td>晚开播10分钟以内</td><td>不算迟到，不扣</td></tr>
-        <tr><td>晚开播超过10分钟</td><td>算迟到，每迟到1分钟扣₱3</td></tr>
+        <tr><td>迟到：晚开播10分钟以内</td><td>不算迟到，不扣</td></tr>
+        <tr><td>迟到：晚开播超过10分钟</td><td>每迟到1分钟扣₱3</td></tr>
+        <tr><td>早退：提前下播30分钟以内</td><td>每少播1分钟扣₱3。例：排6小时只播了5小时45分钟，扣15 × ₱3 = ₱45</td></tr>
+        <tr><td>早退：提前下播超过30分钟</td><td>算无效直播</td></tr>
+        <tr><td>中断直播：分两段播</td><td>算无效直播，除非有团队特别批准。例：早班4小时 + 晚班2小时、3小时 + 3小时</td></tr>
       </table></div>
+      <ul>
+        <li>中断直播的规定从11月16号开始执行。</li>
+        <li>结算工资时，中断直播一律先按无效直播算。有团队批准的，请拿批准证据找团队确认，重新结算。</li>
+        <li>因意外情况中断直播的，也算中断直播。请保留证据，按申诉流程申请。</li>
+      </ul>
     </div>
   </section>
 </div>
@@ -328,24 +337,24 @@ const NOPAY = "不补发";
 const ONLYUP = "次月15号补发 = 全月应发 − 已发金额。只补不扣，算出来低于已发就不补发";
 // ---------- 结果 ----------
 const R = {
-  new923:{big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["发放 = 实际出勤天数 × ₱923","上不封顶：播几天发几天"]},
+  new923:{raise:true,big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["发放 = 实际出勤天数 × ₱923","上不封顶：播几天发几天"],jump:[["month","看全月补发与加薪"]]},
   trial923:{big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["试用期能否通过由人事判断，不卡出勤","发放 = 试用期内实际出勤天数 × ₱923","半月钻石到150K或300K，按老主播的档位发，取高者","试用期结束后的天数，按新主播的出勤标准另算"]},
-  old755:{big:"₱755"+PER,kind:"day",tag:"老主播日薪",rate:755,lines:["发放 = 实际出勤天数 × ₱755","上不封顶：播12天发12天，播15天发15天"]},
-  k1:{big:"₱1,000"+PER,kind:"day",tag:"150K–300K档日薪",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","上不封顶：播15天发₱15,000"]},
-  k13:{big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","这半个月先按₱1,000/天发。全月钻石到500K以上有加薪，差额全月播完后结算"],jump:[["month","看全月加薪"]]},
+  old755:{raise:true,big:"₱755"+PER,kind:"day",tag:"老主播日薪",rate:755,lines:["发放 = 实际出勤天数 × ₱755","上不封顶：播12天发12天，播15天发15天"],jump:[["month","看全月补发与加薪"]]},
+  k1:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"150K–300K档日薪",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","上不封顶：播15天发₱15,000"],jump:[["month","看全月补发与加薪"]]},
+  k13:{raise:true,big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","这半个月先按₱1,000/天发"],jump:[["month","看全月加薪"]]},
   pctTrial:{big:PCT,kind:"pct",comm:true,tag:"未通过试用",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%"]},
   pct:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
   pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"新主播日均低于3K",lines:["日均钻石不到3K，不发新手保护期日薪，只按20%佣金结算",CAP_LINE,"全月追上来还能补发日薪"],jump:[["month","看全月补发"]]},
   pctAppeal:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","全月达标仍可补发，见全月补发与加薪"],jump:[["month","看全月补发"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"全月出勤不满24天",lines:["全月钻石不到600K，又没播满24天，不补发","已经发的半月工资不变","半月钻石300K以上的₱13,000保底不受影响"]},
-  noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变"]},
-  m755:{big:"₱755"+PER,kind:"day",tag:"全月补发",rate:755,month:true,lines:["全月应发 = 全月出勤天数 × ₱755",ONLYUP]},
-  r26:{big:"₱1,000"+PER,kind:"top",tag:"月底薪₱26,000档",rate:1000,month:true,lines:["全月应发 = 全月出勤天数 × ₱1,000（₱26,000 ÷ 26天）",ONLYUP]},
-  r28:{big:"₱1,077"+PER,kind:"top",tag:"月底薪₱28,000档",rate:28000/26,month:true,lines:["全月应发 = 全月出勤天数 × ₱1,077（₱28,000 ÷ 26天）","全月钻石到600K就不看出勤，保底₱28,000",ONLYUP]},
-  g28:{big:"₱28,000+",kind:"top",tag:"全月保底，不看出勤",rate:28000/26,floor:28000,month:true,lines:["保底整月底薪₱28,000，不管播了几天","出勤超过26天按₱1,077/天继续加",ONLYUP]},
-  g30:{big:"₱30,000+",kind:"top",tag:"全月保底，不看出勤",rate:30000/26,floor:30000,month:true,lines:["保底整月底薪₱30,000，不管播了几天","出勤超过26天按₱1,154/天继续加",ONLYUP]},
-  g30a:{big:"₱30,000+ 和 ₱15,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱15,000，每月15号发放",ONLYUP]},
-  g30b:{big:"₱30,000+ 和 ₱20,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱20,000，每月15号发放",ONLYUP]},
+  noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变","全月出勤满28天，另发辛苦奖₱4,000"]},
+  m755:{big:"₱755"+PER,kind:"day",tag:"全月补发",rate:755,month:true,lines:["全月应发 = 全月出勤天数 × ₱755",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  r26:{big:"₱1,000"+PER,kind:"top",tag:"月底薪₱26,000档",rate:1000,month:true,lines:["全月应发 = 全月出勤天数 × ₱1,000（₱26,000 ÷ 26天）",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  r28:{big:"₱1,077"+PER,kind:"top",tag:"月底薪₱28,000档",rate:28000/26,month:true,lines:["全月应发 = 全月出勤天数 × ₱1,077（₱28,000 ÷ 26天）","全月钻石到600K就不看出勤，保底₱28,000",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  g28:{big:"₱28,000+",kind:"top",tag:"全月保底，不看出勤",rate:28000/26,floor:28000,month:true,lines:["保底整月底薪₱28,000，不管播了几天","出勤超过26天按₱1,077/天继续加",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  g30:{big:"₱30,000+",kind:"top",tag:"全月保底，不看出勤",rate:30000/26,floor:30000,month:true,lines:["保底整月底薪₱30,000，不管播了几天","出勤超过26天按₱1,154/天继续加",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  g30a:{big:"₱30,000+ 和 ₱15,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:15000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱15,000，每月15号发放",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
+  g30b:{big:"₱30,000+ 和 ₱20,000",kind:"top",tag:"全月保底 + 奖金，不看出勤",rate:30000/26,floor:30000,bonus:20000,month:true,lines:["保底整月底薪₱30,000，出勤超过26天按₱1,154/天继续加","另发奖金₱20,000，每月15号发放",ONLYUP,"全月出勤满28天，另发辛苦奖₱4,000"]},
   aNew:{big:"₱923"+PER,kind:"day",tag:"新主播申诉通过，不看日均",rate:923,lines:["发放 = 实际出勤天数 × ₱923"]},
   a755low:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K以下档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
@@ -374,7 +383,7 @@ const dia = isNew => {
 };
 const att24 = ok => ({q:"全月出勤满24天吗？", hint:"看全月合计，不要求每个半月都满12天。", opts:[{l:"满24天", next:ok},{l:"不满24天", next:R.noMonth}]});
 const TREES = {
-  half:{name:"半月底薪", desc:"每半个月结算时用", root:"半月底薪",
+  half:{name:"半月底薪", desc:"每半个月结算时用，不含加薪", root:"半月底薪",
     tree:{q:"主播现在处于哪个阶段？", opts:[
       {l:"试用期", s:"入职前7天", next:{q:"通过7天试用了吗？", hint:"由人事判断。素质好但因客观原因出勤少（哪怕不到5天），也可以通过。", opts:[
         {l:"通过", next:R.trial923},{l:"未通过", next:R.pctTrial}]}},
@@ -382,8 +391,8 @@ const TREES = {
       {l:"老主播", s:"入职超过15天", next:dia(false)}
     ]},
     start:[2,1,0]},
-  month:{name:"全月补发与加薪", desc:"全月播完后用，次月15号发", root:"全月结算",
-    tree:{q:"全月钻石合计多少？", hint:"上下两个半月加起来。600K及以上不看出勤。", opts:[
+  month:{name:"全月补发与加薪", desc:"全月播完后用，含加薪和补发，次月15号发", root:"全月结算",
+    tree:{q:"全月钻石合计多少？", hint:"上下两个半月加起来。600K及以上不看出勤。算出全月应发后，减去两个半月已经发的底薪或佣金，就是补发或加薪的差额。", opts:[
       {l:"低于160K", next:R.noDia},
       {l:"160K–300K", next:att24(R.m755)},
       {l:"300K–500K", next:att24(R.r26)},
@@ -395,7 +404,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"申诉", desc:"拿20%佣金、有特殊情况的主播可以申请", root:"申诉",
-    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。长病假、长事假、休息调整合计每三个月只有一次机会。", opts:[
+    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。所有申诉合计每三个月只有一次机会。", opts:[
       {l:"通过", next:{q:"剩余天数里出勤满80%吗？", hint:"剩余天数 = 本期天数 − 批准的请假天数。例：请假5天，剩10天，需出勤8天。", opts:[
         {l:"满80%", next:{q:"新主播还是老主播？", opts:[
           {l:"新主播", s:"入职15天内，含第15天", next:R.aNew},
@@ -477,6 +486,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
+    ${r.raise ? `<div class="raise">这里只算这半个月的底薪，不含加薪。全月结算时会按全月总钻石重新对档：全月300K以上按加薪阶梯（500K以上₱1,077/天起，600K以上保底整月底薪），差额次月15号补发。具体金额请看「全月补发与加薪」。</div>` : ""}
     ${r.contract ? `<div class="contract">请与你的HR确认你是否签署了带底薪的合同，佣金合同主播不适用该选项。</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
@@ -492,6 +502,7 @@ function updateCalc(r){
     if (r.floor) total = Math.max(r.floor, total);
     total = Math.max(0, total - Math.max(0, +$("paid").value || 0));
     label = "次月15号补发 = 全月应发 − 已发（只补不扣）" + (r.bonus ? "，另加奖金 " + fmt(r.bonus) : "");
+    if (d >= 28){ total += 4000; label += "，已含辛苦奖₱4,000"; }
   } else label = "这半个月应发";
   $("calcLabel").textContent = label;
   $("amt").textContent = fmt(total);

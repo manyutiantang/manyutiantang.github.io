@@ -103,7 +103,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .comm td{padding:5px 0;border-bottom:1px solid var(--line)}
 .comm .sum td{border-bottom:none;font-weight:700}
 .comm .sum td.r{font-family:var(--font-num);font-size:24px;color:var(--pct)}
-.contract{background:var(--pct-soft);color:var(--ink);border-left:4px solid var(--pct);border-radius:6px;padding:8px 12px;font-size:14px;font-weight:500}
 .raise{background:var(--accent-soft);color:var(--ink);border-left:4px solid var(--accent);border-radius:6px;padding:8px 12px;font-size:14px}
 .jump{display:flex;flex-wrap:wrap;gap:8px}
 .jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
@@ -418,7 +417,6 @@ const R = {
 };
 
 // ---------- 三棵树 ----------
-R.old755low = {...R.old755, contract:true};
 const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
 const dia = isNew => {
   const base = isNew ? R.new923 : R.old755;
@@ -428,7 +426,7 @@ const dia = isNew => {
   const low = isNew
     ? [{l:"Below 3K/day", s:"Daily average", next:R.pctNewLow},
        {l:"3K–7K/day", s:"Daily average", next:a(base)}]
-    : [{l:"Below 80K", next:a(R.old755low)}];
+    : [{l:"Below 80K", next:a(base)}];
   return {q:"How many diamonds this half-month?", hint: isNew ? "Daily average = half-month diamonds ÷ days streamed." : undefined, opts:[
     ...low,
     {l:"80K–150K", s:"80K up to just under 150K", next:a(base)},
@@ -542,7 +540,6 @@ function renderResult(w){
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
     ${r.raise ? `<div class="raise">This is half-month base pay only, with no raise. Raises use total diamonds for the month and are paid on the 15th of the next month.</div>` : ""}
-    ${r.contract ? `<div class="contract">Please confirm with your HR that you signed a contract with base pay. This does not apply to hosts on a commission contract.</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;
   if (r.rate) updateCalc(r);

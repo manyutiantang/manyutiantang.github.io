@@ -411,8 +411,8 @@ const R = {
   aNew:{big:"₱923"+PER,kind:"day",tag:"新主播申诉通过，不看日均",rate:923,lines:["发放 = 实际出勤天数 × ₱923"]},
   a755low:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K以下档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"申诉通过，80K档",rate:755,lines:["发放 = 实际出勤天数 × ₱755"]},
-  a1k:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，150K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000"]},
-  a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"申诉通过，300K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","半月钻石合计到300K的，直接按₱13,000+发"]}
+  a1k:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"申诉通过，150K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000"],jump:[["month","看全月补发与加薪"]]},
+  a1kTop:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"申诉通过，300K档",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","半月钻石合计到300K的，直接按₱13,000+发"],jump:[["month","看全月补发与加薪"]]}
 };
 
 // ---------- 三棵树 ----------

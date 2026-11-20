@@ -411,8 +411,8 @@ const R = {
   aNew:{big:"₱923"+PER,kind:"day",tag:"New host appeal approved, no daily-average check",rate:923,lines:["Pay = days streamed × ₱923"]},
   a755low:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, below the 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
   a755:{big:"₱755"+PER,kind:"day",tag:"Appeal approved, 80K tier",rate:755,lines:["Pay = days streamed × ₱755"]},
-  a1k:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 150K tier",rate:1000,lines:["Pay = days streamed × ₱1,000"]},
-  a1kTop:{big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 300K tier",rate:1000,lines:["Pay = days streamed × ₱1,000","If the half-month total reaches 300K, ₱13,000+ applies instead"]}
+  a1k:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 150K tier",rate:1000,lines:["Pay = days streamed × ₱1,000"],jump:[["month","See monthly back pay and raise"]]},
+  a1kTop:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"Appeal approved, 300K tier",rate:1000,lines:["Pay = days streamed × ₱1,000","If the half-month total reaches 300K, ₱13,000+ applies instead"],jump:[["month","See monthly back pay and raise"]]}
 };
 
 // ---------- 三棵树 ----------

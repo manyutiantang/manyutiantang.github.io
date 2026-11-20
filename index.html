@@ -195,11 +195,11 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <h2>Paydays</h2>
       <div class="tbl"><table>
         <tr><th>What is paid</th><th>When</th></tr>
-        <tr><td>Pay for the 1st–15th</td><td>End of the same month</td></tr>
-        <tr><td>Pay for the 16th–month end</td><td>15th of the next month</td></tr>
-        <tr><td>Back pay, raise difference, bonus</td><td>15th of the next month</td></tr>
+        <tr><td>Base pay for the 1st–15th (no raise)</td><td>End of the same month</td></tr>
+        <tr><td>Base pay for the 16th–month end, back pay, raise, all bonuses</td><td>15th of the next month</td></tr>
+        <tr><td>Bills and deductions</td><td>Taken on every payday</td></tr>
       </table></div>
-      <p class="note">Pay is held for half a month. Back pay = full-month pay due − amount already paid (any 20% commission already paid is deducted). It only tops up and never deducts.</p>
+      <p class="note">Pay is held for half a month. Back pay = full-month pay due − amount already paid, and it only tops up. Bills and deductions are taken from the pay on each payday.</p>
     </div>
 
     <div class="panel ref">
@@ -489,7 +489,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
-    ${r.raise ? `<div class="raise">This is only the base pay for this half-month and does not include any raise. At the monthly settlement, total diamonds for the month set the tier again: from 300K the raise ladder applies (₱1,077/day from 500K, full monthly base paid from 600K, 26 days a month at most), and the difference is paid on the 15th of the next month. See Monthly back pay and raise for the amount.</div>` : ""}
+    ${r.raise ? `<div class="raise">This is half-month base pay only, with no raise. Raises use total diamonds for the month and are paid on the 15th of the next month.</div>` : ""}
     ${r.contract ? `<div class="contract">Please confirm with your HR that you signed a contract with base pay. This does not apply to hosts on a commission contract.</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;

@@ -195,11 +195,11 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <h2>发薪日</h2>
       <div class="tbl"><table>
         <tr><th>结算内容</th><th>发放时间</th></tr>
-        <tr><td>1–15号的工资</td><td>当月月底</td></tr>
-        <tr><td>16号–月底的工资</td><td>次月15号</td></tr>
-        <tr><td>全月补发、加薪差额、奖金</td><td>次月15号</td></tr>
+        <tr><td>1–15号的底薪（不含加薪）</td><td>当月月底</td></tr>
+        <tr><td>16号–月底的底薪、全月补发、加薪、所有奖金</td><td>次月15号</td></tr>
+        <tr><td>账单和罚款</td><td>每个发薪日都扣</td></tr>
       </table></div>
-      <p class="note">公司押半个月工资。补发金额 = 全月应发 − 已发金额（已发的20%佣金要减掉），只补不扣。</p>
+      <p class="note">公司押半个月工资。补发 = 全月应发 − 已发，只补不扣。账单和罚款在每个发薪日从当期工资里扣。</p>
     </div>
 
     <div class="panel ref">
@@ -489,7 +489,7 @@ function renderResult(w){
     <div class="big">${r.big}</div>
     <div class="path">${crumbs}</div>
     <ul>${r.lines.map(l => `<li>${l}</li>`).join("")}</ul>
-    ${r.raise ? `<div class="raise">这里只算这半个月的底薪，不含加薪。全月结算时会按全月总钻石重新对档：全月300K以上按加薪阶梯（500K以上₱1,077/天起，600K以上固定发整月底薪，全月最多26天），差额次月15号补发。具体金额请看「全月补发与加薪」。</div>` : ""}
+    ${r.raise ? `<div class="raise">这里只算半月底薪，不含加薪。加薪按全月总钻石算，次月15号发。</div>` : ""}
     ${r.contract ? `<div class="contract">请与你的HR确认你是否签署了带底薪的合同，佣金合同主播不适用该选项。</div>` : ""}
     ${calc}
     ${r.jump ? `<div class="jump">${r.jump.map(j => `<button data-tab="${j[0]}">${j[1]}</button>`).join("")}</div>` : ""}`;

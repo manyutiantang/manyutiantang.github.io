@@ -244,7 +244,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>150K–300K</td><td>全部主播</td><td class="r">₱1,000/天</td><td class="r">₱26,000</td></tr>
         <tr><td>300K及以上</td><td>全部主播</td><td class="r">₱13,000+</td><td class="r">见加薪阶梯</td></tr>
       </table></div>
-      <p class="note">入职前7天是试用期；入职15天内（含第15天）算新主播，超过15天算老主播。一个结算期里跨了两种身份就分段算，每段按各自的标准。试用期和新主播的半月钻石到150K或300K，按上表对应档位发，取高者。₱13,000+ 指不看出勤保底₱13,000，出勤超过13天按₱1,000/天继续加，全月合计仍最多26天。新主播期不满一个月，不涉及封顶。</p>
+      <p class="note">入职前7天是试用期；入职15天内（含第15天）算新主播，超过15天算老主播。试用期和新主播合在一起按前15天考核，见下方"新主播考核标准"。新主播的半月钻石到150K或300K，按上表对应档位发，取高者。₱13,000+ 指不看出勤保底₱13,000，出勤超过13天按₱1,000/天继续加，全月合计仍最多26天。新主播期不满一个月，不涉及封顶。</p>
     </div>
 
     <div class="panel ref">
@@ -380,6 +380,16 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">下载 PDF</a>
       </div>
     </div>
+
+    <div class="panel ref">
+      <h2>新主播考核标准</h2>
+      <div class="tbl"><table>
+        <tr><th>阶段</th><th>通过标准</th><th>没通过</th></tr>
+        <tr><td>试用期（入职前7天）</td><td>日均2K/天，不看出勤</td><td>20%佣金</td></tr>
+        <tr><td>新主播（入职前15天，含试用期）</td><td>日均3K/天，出勤达到80%</td><td>这15天的钻石全部按20%佣金</td></tr>
+      </table></div>
+      <p class="note">通过试用只代表进入新主播期。前15天两项都达标，才能按新手保护期日薪结算。</p>
+    </div>
   </section>
 </div>
 
@@ -392,13 +402,14 @@ const ONLYUP = "次月15号补发 = 全月应发 − 已发金额。只补不扣
 // ---------- 结果 ----------
 const R = {
   new923:{raise:true,big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["发放 = 实际出勤天数 × ₱923","半个月播几天发几天"],jump:[["month","看全月补发与加薪"]]},
-  trial923:{big:"₱923"+PER,kind:"day",tag:"新手保护期日薪",rate:923,lines:["试用期能否通过由人事判断，不卡出勤","发放 = 试用期内实际出勤天数 × ₱923","半月钻石到150K或300K，按老主播的档位发，取高者","试用期结束后的天数，按新主播的出勤标准另算"]},
+  trial923:{big:"通过考核",kind:"day",tag:"试用期日均达到2K/天",lines:["恭喜你！已达到2K/天的考核目标，具体薪资请参照新主播标准执行。","注意：通过试用不代表能拿新手保护期日薪。入职前15天（含7天试用期）要日均3K/天、出勤达到80%，否则这15天的钻石全部按20%佣金结算"],jump:[["half:1","查看新主播标准"]]},
   old755:{raise:true,big:"₱755"+PER,kind:"day",tag:"老主播日薪",rate:755,lines:["发放 = 实际出勤天数 × ₱755","播12天发12天，播15天发15天；全月最多26天，封顶₱19,630"],jump:[["month","看全月补发与加薪"]]},
   k1:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"150K–300K档日薪",rate:1000,lines:["发放 = 实际出勤天数 × ₱1,000","播15天发₱15,000；全月最多26天，封顶₱26,000"],jump:[["month","看全月补发与加薪"]]},
   k13:{raise:true,big:"₱13,000+",kind:"top",tag:"300K以上档，不看出勤",rate:1000,floor:13000,lines:["保底全薪₱13,000，哪怕只播1天","出勤超过13天按₱1,000/天继续加，播15天发₱15,000","这半个月先按₱1,000/天发；全月最多26天，封顶见加薪阶梯"],jump:[["month","看全月加薪"]]},
-  pctTrial:{big:PCT,kind:"pct",comm:true,tag:"未通过试用",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%"]},
+  pctTrial:{big:PCT,kind:"pct",comm:true,tag:"未通过试用（日均不到2K/天）",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%"]},
   pct:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"这半个月出勤不达标",lines:["这半个月不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","有特殊情况可以申诉","全月追上来还能补发日薪"],jump:[["appeal","走申诉流程"],["month","看全月补发"]]},
-  pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"新主播日均低于3K",lines:["日均钻石不到3K，不发新手保护期日薪，只按20%佣金结算",CAP_LINE,"全月追上来还能补发日薪"],jump:[["month","看全月补发"]]},
+  pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"新主播前15天日均低于3K",lines:["前15天（含试用期）日均不到3K，这15天的钻石全部按20%佣金结算，试用期通过也一样",CAP_LINE]},
+  pctNew:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"新主播出勤不到80%",lines:["前15天（含试用期）出勤不到80%，这15天的钻石全部按20%佣金结算，试用期通过也一样",CAP_LINE],jump:[["appeal","走申诉流程"]]},
   pctAppeal:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"申诉后仍按佣金",lines:["不发日薪，只按20%佣金结算","20%佣金已含你在TikTok自提的5%，公司发放15%，每半月最多₱10,000","全月达标仍可补发，见全月补发与加薪"],jump:[["month","看全月补发"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"全月出勤不满24天",lines:["全月钻石不到600K，又没播满24天，不补发","已经发的半月工资不变","半月钻石300K以上的₱13,000保底不受影响"]},
   noDia:{big:NOPAY,kind:"none",tag:"全月钻石低于160K",lines:["全月钻石没到160K，不补发","已经发的半月工资不变","全月出勤满28天，另发辛苦奖₱4,000"]},
@@ -417,17 +428,17 @@ const R = {
 };
 
 // ---------- 三棵树 ----------
-const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
+const att = (ok, okLabel, noLabel, q, hint, fail) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:fail || R.pct}]});
 const dia = isNew => {
   const base = isNew ? R.new923 : R.old755;
   const a = r => isNew
-    ? att(r,"达标","未达标","出勤达到应出勤天数了吗？","应出勤天数 = 在职天数（含入职当天）× 80%，四舍五入。见下方对照表。")
+    ? att(r,"达标","未达标","出勤达到应出勤天数了吗？","应出勤天数 = 在职天数（含入职当天）× 80%，四舍五入，按前15天（含试用期）算。见下方对照表。", R.pctNew)
     : att(r,"满12天","不满12天","这半个月出勤满12天吗？","12天 = 15天 × 80%。");
   const low = isNew
     ? [{l:"低于3K/天", s:"日均钻石", next:R.pctNewLow},
        {l:"3K–7K/天", s:"日均钻石", next:a(base)}]
     : [{l:"低于80K", next:a(base)}];
-  return {q:"这半个月的钻石是多少？", hint: isNew ? "日均钻石 = 半月钻石 ÷ 实际出勤天数。" : undefined, opts:[
+  return {q:"这半个月的钻石是多少？", hint: isNew ? "新主播的日均按入职前15天（含7天试用期）算：日均 = 15天内的钻石 ÷ 实际出勤天数。" : undefined, opts:[
     ...low,
     {l:"80K–150K", s:"含80K，不含150K", next:a(base)},
     {l:"150K–300K", s:"含150K，不含300K", next:a(R.k1)},
@@ -438,8 +449,8 @@ const att24 = ok => ({q:"全月出勤满24天吗？", hint:"看全月合计，�
 const TREES = {
   half:{name:"半月底薪", desc:"每半个月结算时用，不含加薪", root:"半月底薪",
     tree:{q:"主播现在处于哪个阶段？", opts:[
-      {l:"试用期", s:"入职前7天", next:{q:"通过7天试用了吗？", hint:"由人事判断。素质好但因客观原因出勤少（哪怕不到5天），也可以通过。", opts:[
-        {l:"通过", next:R.trial923},{l:"未通过", next:R.pctTrial}]}},
+      {l:"试用期", s:"入职前7天", next:{q:"通过7天试用了吗？", hint:"通过标准：试用7天的日均钻石达到2K/天，不看出勤。", opts:[
+        {l:"通过", s:"日均2K/天以上", next:R.trial923},{l:"未通过", s:"日均不到2K/天", next:R.pctTrial}]}},
       {l:"新主播", s:"已过试用，入职第8–15天", next:dia(true)},
       {l:"老主播", s:"入职超过15天", next:dia(false)}
     ]},
@@ -593,7 +604,7 @@ function render(){ const w = walk(); renderTabs(); renderSteps(w); renderResult(
 
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.tab){ cur = b.dataset.tab; render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
+  if (b.dataset.tab){ const [t, pth] = b.dataset.tab.split(":"); cur = t; if (pth) paths[t] = pth.split(",").map(Number); render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
   else if (b.dataset.step){ const i = +b.dataset.step; paths[cur] = paths[cur].slice(0, i); paths[cur][i] = +b.dataset.opt; render(); }
   else if (b.dataset.path){ paths[cur] = b.dataset.path.split(",").map(Number); render(); }
   else if (b.id === "reset"){ paths[cur] = []; render(); }

@@ -244,7 +244,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>150K–300K</td><td>All hosts</td><td class="r">₱1,000/day</td><td class="r">₱26,000</td></tr>
         <tr><td>300K and above</td><td>All hosts</td><td class="r">₱13,000+</td><td class="r">See raise ladder</td></tr>
       </table></div>
-      <p class="note">The first 7 days are the trial. A host is new through day 15 and regular after day 15. If a period covers two stages, each part is settled under its own rule. Trial and new hosts who reach 150K or 300K diamonds in a half-month get the matching tier above when it pays more. ₱13,000+ means ₱13,000 is guaranteed regardless of attendance, and each day beyond 13 adds ₱1,000, within the 26-day monthly cap. The new host period is shorter than a month, so the cap does not apply to it.</p>
+      <p class="note">The first 7 days are the trial. A host is new through day 15 and regular after day 15. The trial and new host period are assessed together over the first 15 days, see New host assessment below. New hosts who reach 150K or 300K diamonds in a half-month get the matching tier above when it pays more. ₱13,000+ means ₱13,000 is guaranteed regardless of attendance, and each day beyond 13 adds ₱1,000, within the 26-day monthly cap. The new host period is shorter than a month, so the cap does not apply to it.</p>
     </div>
 
     <div class="panel ref">
@@ -380,6 +380,16 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">Download PDF</a>
       </div>
     </div>
+
+    <div class="panel ref">
+      <h2>New host assessment</h2>
+      <div class="tbl"><table>
+        <tr><th>Stage</th><th>To pass</th><th>If not passed</th></tr>
+        <tr><td>Trial (first 7 days)</td><td>2K/day average, attendance not checked</td><td>20% commission</td></tr>
+        <tr><td>New host (first 15 days, trial included)</td><td>3K/day average and 80% attendance</td><td>All diamonds from those 15 days at 20% commission</td></tr>
+      </table></div>
+      <p class="note">Passing the trial only starts the new host period. The newcomer rate applies only if both 15-day targets are met.</p>
+    </div>
   </section>
 </div>
 
@@ -392,13 +402,14 @@ const ONLYUP = "Back pay on the 15th = month pay due − amount already paid. It
 // ---------- 结果 ----------
 const R = {
   new923:{raise:true,big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["Pay = days streamed × ₱923","Every day streamed in the half-month is paid"],jump:[["month","See monthly back pay and raise"]]},
-  trial923:{big:"₱923"+PER,kind:"day",tag:"Newcomer protection rate",rate:923,lines:["HR decides whether the trial is passed. Attendance is not a requirement","Pay = days streamed during the trial × ₱923","If half-month diamonds reach 150K or 300K, the regular host tier applies when it pays more","Days after the trial are settled separately under the new host attendance rule"]},
+  trial923:{big:"Trial passed",kind:"day",tag:"Trial average reached 2K/day",lines:["Congratulations! You reached the 2K/day trial target. Your pay follows the new host standard.","Note: passing the trial does not guarantee the newcomer rate. Over your first 15 days (including the 7-day trial) you need a 3K/day average and 80% attendance. Otherwise all diamonds from those 15 days are paid at 20% commission"],jump:[["half:1","See the new host standard"]]},
   old755:{raise:true,big:"₱755"+PER,kind:"day",tag:"Regular host rate",rate:755,lines:["Pay = days streamed × ₱755","12 days pays 12 days, 15 days pays 15 days. The month pays at most 26 days, capped at ₱19,630"],jump:[["month","See monthly back pay and raise"]]},
   k1:{raise:true,big:"₱1,000"+PER,kind:"day",tag:"150K–300K tier rate",rate:1000,lines:["Pay = days streamed × ₱1,000","15 days pays ₱15,000. The month pays at most 26 days, capped at ₱26,000"],jump:[["month","See monthly back pay and raise"]]},
   k13:{raise:true,big:"₱13,000+",kind:"top",tag:"300K+ tier, attendance not required",rate:1000,floor:13000,lines:["₱13,000 is guaranteed, even with only 1 day streamed","Each day beyond 13 adds ₱1,000. 15 days pays ₱15,000","This half-month is first paid at ₱1,000/day. The month pays at most 26 days, capped by the raise ladder"],jump:[["month","See the monthly raise"]]},
-  pctTrial:{big:PCT,kind:"pct",comm:true,tag:"Trial not passed",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%"]},
+  pctTrial:{big:PCT,kind:"pct",comm:true,tag:"Trial not passed (average below 2K/day)",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%"]},
   pct:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"Attendance not met this half-month",lines:["No daily rate this half-month. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","You can appeal if there is a special situation","Catch up over the full month to get back pay"],jump:[["appeal","Go to appeal"],["month","See monthly back pay"]]},
-  pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"New host, daily average below 3K",lines:["With a daily average below 3K, the newcomer rate does not apply. Pay is 20% commission only",CAP_LINE,"Catch up over the full month to get back pay"],jump:[["month","See monthly back pay"]]},
+  pctNewLow:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"New host, first 15 days below 3K/day",lines:["With a first-15-day average below 3K (trial included), all diamonds from those 15 days are paid at 20% commission, even if the trial was passed",CAP_LINE]},
+  pctNew:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"New host, attendance below 80%",lines:["With attendance below 80% in the first 15 days (trial included), all diamonds from those 15 days are paid at 20% commission, even if the trial was passed",CAP_LINE],jump:[["appeal","Go to appeal"]]},
   pctAppeal:{big:PCT,kind:"pct",comm:true,cap:10000,tag:"Still commission after appeal",lines:["No daily rate. Pay is 20% commission only","The 20% includes the 5% you withdraw yourself on TikTok. The company pays the other 15%, up to ₱10,000 per half-month","Back pay is still possible if the full month qualifies. See monthly back pay and raise"],jump:[["month","See monthly back pay"]]},
   noMonth:{big:NOPAY,kind:"none",tag:"Fewer than 24 days in the month",lines:["Month diamonds are below 600K and attendance is under 24 days, so there is no back pay","Half-month pay already issued stays the same","The ₱13,000 guarantee for a 300K+ half-month is not affected"]},
   noDia:{big:NOPAY,kind:"none",tag:"Month diamonds below 160K",lines:["Month diamonds did not reach 160K, so there is no back pay","Half-month pay already issued stays the same","28 days of attendance in the month adds a ₱4,000 hard work bonus"]},
@@ -417,17 +428,17 @@ const R = {
 };
 
 // ---------- 三棵树 ----------
-const att = (ok, okLabel, noLabel, q, hint) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:R.pct}]});
+const att = (ok, okLabel, noLabel, q, hint, fail) => ({q, hint, opts:[{l:okLabel, next:ok},{l:noLabel, next:fail || R.pct}]});
 const dia = isNew => {
   const base = isNew ? R.new923 : R.old755;
   const a = r => isNew
-    ? att(r,"Met","Not met","Did attendance reach the required days?","Required days = days on board (start day included) × 80%, rounded. See the table below.")
+    ? att(r,"Met","Not met","Did attendance reach the required days?","Required days = days on board (start day included) × 80%, rounded, over the first 15 days including the trial. See the table below.", R.pctNew)
     : att(r,"12 days or more","Fewer than 12 days","Did the host stream 12 days this half-month?","12 days = 15 days × 80%.");
   const low = isNew
     ? [{l:"Below 3K/day", s:"Daily average", next:R.pctNewLow},
        {l:"3K–7K/day", s:"Daily average", next:a(base)}]
     : [{l:"Below 80K", next:a(base)}];
-  return {q:"How many diamonds this half-month?", hint: isNew ? "Daily average = half-month diamonds ÷ days streamed." : undefined, opts:[
+  return {q:"How many diamonds this half-month?", hint: isNew ? "For new hosts, the average covers the first 15 days including the 7-day trial: average = diamonds in those days ÷ days streamed." : undefined, opts:[
     ...low,
     {l:"80K–150K", s:"80K up to just under 150K", next:a(base)},
     {l:"150K–300K", s:"150K up to just under 300K", next:a(R.k1)},
@@ -438,8 +449,8 @@ const att24 = ok => ({q:"Did the host stream 24 days in the month?", hint:"This 
 const TREES = {
   half:{name:"Half-month base pay", desc:"Use at every half-month settlement. Raises not included", root:"Half-month base pay",
     tree:{q:"Which stage is the host in?", opts:[
-      {l:"Trial", s:"First 7 days", next:{q:"Did the host pass the 7-day trial?", hint:"HR decides. A strong host with low attendance for good reasons (even under 5 days) can still pass.", opts:[
-        {l:"Passed", next:R.trial923},{l:"Not passed", next:R.pctTrial}]}},
+      {l:"Trial", s:"First 7 days", next:{q:"Did the host pass the 7-day trial?", hint:"To pass: a 2K/day diamond average over the 7-day trial. Attendance is not checked.", opts:[
+        {l:"Passed", s:"2K/day or more", next:R.trial923},{l:"Not passed", s:"Below 2K/day", next:R.pctTrial}]}},
       {l:"New host", s:"Trial passed, day 8–15", next:dia(true)},
       {l:"Regular host", s:"More than 15 days on board", next:dia(false)}
     ]},
@@ -593,7 +604,7 @@ function render(){ const w = walk(); renderTabs(); renderSteps(w); renderResult(
 
 document.addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
-  if (b.dataset.tab){ cur = b.dataset.tab; render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
+  if (b.dataset.tab){ const [t, pth] = b.dataset.tab.split(":"); cur = t; if (pth) paths[t] = pth.split(",").map(Number); render(); if (b.closest(".jump")) $("tabs").scrollIntoView({block:"start"}); }
   else if (b.dataset.step){ const i = +b.dataset.step; paths[cur] = paths[cur].slice(0, i); paths[cur][i] = +b.dataset.opt; render(); }
   else if (b.dataset.path){ paths[cur] = b.dataset.path.split(",").map(Number); render(); }
   else if (b.id === "reset"){ paths[cur] = []; render(); }

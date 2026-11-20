@@ -108,6 +108,16 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline
 .jump{display:flex;flex-wrap:wrap;gap:8px}
 .jump button{background:var(--accent-soft);color:var(--accent);border:none;border-radius:8px;padding:8px 12px;cursor:pointer;font:inherit;font-weight:500}
 
+.mapsec{display:block}
+.mapsec[open]{display:flex;flex-direction:column;gap:12px}
+.mapsec summary{display:flex;align-items:center;gap:12px;cursor:pointer;list-style:none}
+.mapsec summary::-webkit-details-marker{display:none}
+.mapsec summary::before{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(-45deg);transition:transform .15s}
+.mapsec[open] summary::before{transform:rotate(45deg)}
+.mapsec summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:4px}
+.sumhint{margin-left:auto;font-size:13px;color:var(--muted)}
+.mapsec[open] .sumhint{display:none}
+@media (prefers-reduced-motion:reduce){.mapsec summary::before{transition:none}}
 .mapbox{overflow-x:auto;padding:6px 2px 10px}
 .tree,.tree ul{list-style:none;margin:0;padding:0}
 .tree{display:inline-flex}
@@ -192,8 +202,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     <div class="panel result" id="result" aria-live="polite"></div>
   </section>
 
-  <section class="panel" style="display:flex;flex-direction:column;gap:12px">
-    <h2 id="mapTitle"></h2>
+  <details class="panel mapsec" id="mapsec">
+    <summary><h2 id="mapTitle"></h2><span class="sumhint">Click to expand</span></summary>
     <div class="legend">
       <span><i style="background:var(--day)"></i>Daily rate</span>
       <span><i style="background:var(--pct)"></i>20% commission</span>
@@ -201,7 +211,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       <span><i style="background:var(--none)"></i>No back pay</span>
     </div>
     <div class="mapbox" id="map"></div>
-  </section>
+  </details>
 
   <section class="refs">
     <div class="panel ref">

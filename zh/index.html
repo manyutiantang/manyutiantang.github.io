@@ -7,25 +7,26 @@
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
 /* 布局思路：上方三选一的结算场景 → 左侧逐步选择、右侧结果卡 → 下方整张导图（与选择联动）→ 参考表 */
 :root{
-  --bg:#F3F5F8; --panel:#FFFFFF; --ink:#15202B; --muted:#5C6B7A; --line:#D5DCE4;
-  --accent:#2347D3; --accent-soft:#E6EBFC;
-  --day:#0E7A55; --day-soft:#DDF3EA;
-  --pct:#A85B00; --pct-soft:#FCEBD3;
-  --top:#6A2BC2; --top-soft:#EEE3FB;
-  --none:#56626E; --none-soft:#E7EBEF;
+  --bg:#FFF6FA; --panel:#FFFFFF; --ink:#3B2440; --muted:#86708C; --line:#F2DCE8;
+  --accent:#D63E8F; --accent-soft:#FDE6F2;
+  --day:#13895F; --day-soft:#E1F6EC;
+  --pct:#B85E06; --pct-soft:#FFF0DC;
+  --top:#7B3FD4; --top-soft:#F1E6FF;
+  --none:#7A6A80; --none-soft:#F2ECF3;
   --red:#C0362C; --red-soft:#FCE9E6;
   --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --font-num:"Barlow Condensed","Noto Sans SC","PingFang SC",sans-serif;
+  --font-display:"Baloo 2","ZCOOL KuaiLe","Noto Sans SC","PingFang SC",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
-    --accent:#8FA6FF; --accent-soft:#222E57;
+    --bg:#1B1320; --panel:#251A2C; --ink:#F5E9F2; --muted:#BBA5BF; --line:#3E2D46;
+    --accent:#FF8CC6; --accent-soft:#4A2140;
     --day:#5FD3A6; --day-soft:#153729;
     --pct:#F2B25C; --pct-soft:#3D2C12;
     --top:#C29BFF; --top-soft:#2F2148;
@@ -35,8 +36,8 @@
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
-  --accent:#8FA6FF; --accent-soft:#222E57;
+  --bg:#1B1320; --panel:#251A2C; --ink:#F5E9F2; --muted:#BBA5BF; --line:#3E2D46;
+  --accent:#FF8CC6; --accent-soft:#4A2140;
   --day:#5FD3A6; --day-soft:#153729;
   --pct:#F2B25C; --pct-soft:#3D2C12;
   --top:#C29BFF; --top-soft:#2F2148;
@@ -163,6 +164,55 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .days div b{font-family:var(--font-num);font-size:16px}
 .note{color:var(--muted);font-size:13px}
 
+/* ---- cute theme ---- */
+body{background-color:var(--bg);background-image:radial-gradient(var(--line) 1.2px,transparent 1.2px);background-size:22px 22px}
+h1{font-family:var(--font-display);font-size:34px;font-weight:800;letter-spacing:.01em}
+.panel{border-radius:20px;border:1.5px solid var(--line);box-shadow:0 6px 18px rgba(214,62,143,.07)}
+.panel h3{font-family:var(--font-display);font-size:19px;margin:0;font-weight:700}
+.tab{border-radius:18px;box-shadow:0 4px 12px rgba(214,62,143,.06)}
+.tab b{font-family:var(--font-display);font-size:18px}
+.opt{border-radius:14px}
+.step .n{background:var(--accent);color:#fff}
+.step .q{font-family:var(--font-display);font-size:17px}
+.reset{color:var(--accent)}
+.result{border-radius:22px}
+.raise{border-radius:12px}
+.effective{border:1.5px dashed var(--accent)}
+.mapsec h2{font-family:var(--font-display);font-size:20px}
+.cats{display:flex;flex-direction:column;gap:34px}
+.cat{--c:var(--accent);--c-soft:var(--accent-soft);display:flex;flex-direction:column;gap:14px}
+.cat-head{display:flex;align-items:center;gap:14px}
+.cat-ico{flex:none;width:52px;height:52px;border-radius:18px;background:var(--c-soft);display:grid;place-items:center;font-size:26px;transform:rotate(-6deg)}
+.cat-title{font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--c);font-weight:800}
+.cat-sub{color:var(--muted);font-size:14px}
+.cat .panel{border-top:6px solid var(--c)}
+.cat .panel h3{color:var(--ink)}
+.cat .refs{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.cat .refs{align-items:start}
+.cat-2 .refs{grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}
+@media (max-width:520px){.cat .refs,.cat-2 .refs{grid-template-columns:1fr}}
+.cat-1{--c:#D63E8F;--c-soft:#FDE6F2}
+.cat-2{--c:#7B4DDB;--c-soft:#EFE7FF}
+.cat-3{--c:#0B8380;--c-soft:#DDF6F4}
+.cat-4{--c:#C2630A;--c-soft:#FFEEDB}
+.cat-5{--c:#2F6FE0;--c-soft:#E3EEFF}
+.cat-6{--c:#8F6A00;--c-soft:#FFF4CC}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .cat-1{--c:#FF8CC6;--c-soft:#4A2140}
+  :root:not([data-theme="light"]) .cat-2{--c:#B99BFF;--c-soft:#33264F}
+  :root:not([data-theme="light"]) .cat-3{--c:#5FD9D4;--c-soft:#173B3B}
+  :root:not([data-theme="light"]) .cat-4{--c:#FFB066;--c-soft:#46301A}
+  :root:not([data-theme="light"]) .cat-5{--c:#8DB4FF;--c-soft:#1E2E4F}
+  :root:not([data-theme="light"]) .cat-6{--c:#F2CF5B;--c-soft:#3F3517}
+}
+:root[data-theme="dark"] .cat-1{--c:#FF8CC6;--c-soft:#4A2140}
+:root[data-theme="dark"] .cat-2{--c:#B99BFF;--c-soft:#33264F}
+:root[data-theme="dark"] .cat-3{--c:#5FD9D4;--c-soft:#173B3B}
+:root[data-theme="dark"] .cat-4{--c:#FFB066;--c-soft:#46301A}
+:root[data-theme="dark"] .cat-5{--c:#8DB4FF;--c-soft:#1E2E4F}
+:root[data-theme="dark"] .cat-6{--c:#F2CF5B;--c-soft:#3F3517}
+.cat .tbl + .tbl{margin-top:4px}
+
 .brand{display:flex;align-items:center;gap:14px;background:#000;border-radius:12px;padding:10px 18px 10px 12px;position:relative;overflow:hidden}
 .brand::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#F04FD0,#8B5CF6 50%,#22D3EE)}
 .brand img{width:52px;height:52px;flex:none;border-radius:50%}
@@ -214,28 +264,34 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     <div class="mapbox" id="map"></div>
   </details>
 
-  <section class="refs">
-    <div class="panel ref">
-      <h2>发薪日</h2>
-      <div class="tbl"><table>
-        <tr><th>结算内容</th><th>发放时间</th></tr>
-        <tr><td>1–15号的底薪（不含加薪）</td><td>当月月底</td></tr>
-        <tr><td>16号–月底的底薪、全月补发、加薪、所有奖金</td><td>次月15号</td></tr>
-        <tr><td>账单和罚款</td><td>每个发薪日都扣</td></tr>
-      </table></div>
-      <p class="note">公司押半个月收益。补发 = 全月应发 − 已发，只补不扣。账单和罚款在每个发薪日从当期收益里扣。</p>
-    </div>
-
-    <div class="panel ref">
-      <h2>出勤标准：80%</h2>
+  <div class="cats">
+  <section class="cat cat-1">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">📅</span><div><h2 class="cat-title">出勤与新主播</h2><p class="cat-sub">怎样算出勤达标，新主播怎么考核</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>出勤标准：80%</h3>
       <p>整期在职的主播，半个月出勤满 <b>12天</b>，全月满 <b>24天</b>。</p>
       <p>半路入职的新主播，按在职天数（含入职当天）× 80% 四舍五入。例：10号入职，到15号在职6天，需出勤5天。</p>
       <div class="days" id="dayGrid"></div>
       <p class="note">每格左边是在职天数，右边加粗的是应出勤天数。</p>
     </div>
-
-    <div class="panel ref">
-      <h2>底薪封顶：全月最多26天</h2>
+        <div class="panel ref">
+      <h3>新主播考核标准</h3>
+      <div class="tbl"><table>
+        <tr><th>阶段</th><th>通过标准</th><th>没通过</th></tr>
+        <tr><td>试用期（入职前7天）</td><td>日均2K/天，不看出勤</td><td>20%佣金</td></tr>
+        <tr><td>新主播（入职前15天，含试用期）</td><td>日均3K/天，出勤达到80%</td><td>这15天的钻石全部按20%佣金</td></tr>
+      </table></div>
+      <p class="note">通过试用只代表进入新主播期。前15天两项都达标，这15天（含试用期）全部按₱923/天结算，最多15天；第16天起按老主播标准。</p>
+      <p class="note">新主播第一次结算收益时，前15天一定已经播完（1–15号的收益在月底发，16号–月底的在次月15号发），所以直接按完整15天的日均和出勤结算，不会有补发。</p>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-2">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">💰</span><div><h2 class="cat-title">底薪、加薪与奖金</h2><p class="cat-sub">每天拿多少、封顶多少、什么时候加薪</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>底薪封顶：全月最多26天</h3>
       <p>出勤达标后，半个月播几天发几天。全月最多按26天算，封顶就是月底薪 = 日薪 × 26天；全月300K以上按加薪阶梯的月底薪封顶。</p>
       <div class="tbl"><table>
         <tr><th>半月钻石</th><th>主播</th><th class="r">日薪</th><th class="r">全月封顶</th></tr>
@@ -246,9 +302,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">入职前7天是试用期；入职15天内（含第15天）算新主播，超过15天算老主播。试用期和新主播合在一起按前15天考核，见下方"新主播考核标准"。新主播的半月钻石到150K或300K，按上表对应档位发，取高者。₱13,000+ 指不看出勤保底₱13,000，出勤超过13天按₱1,000/天继续加，全月合计仍最多26天。新主播期最多15天，从第16天起按老主播标准。</p>
     </div>
-
-    <div class="panel ref">
-      <h2>加薪阶梯</h2>
+        <div class="panel ref ladder">
+      <h3>加薪阶梯</h3>
       <div class="tbl"><table>
         <tr><th>全月钻石合计</th><th class="r">月底薪（封顶）</th><th class="r">日薪</th><th class="r">奖金</th><th>出勤</th></tr>
         <tr><td>300K–500K</td><td class="r">₱26,000</td><td class="r">₱1,000</td><td class="r">–</td><td>满24天</td></tr>
@@ -260,9 +315,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">按全月总钻石对档，日薪 = 月底薪 ÷ 26天。全月钻石低于600K要求全月出勤满24天，按出勤天数 × 日薪结算。600K及以上不看出勤，固定发整月底薪。月底薪也是封顶，全月最多按26天算。每个半月先按₱1,000/天发，差额等全月播完后结算。奖金每月15号发。</p>
     </div>
-
-    <div class="panel ref">
-      <h2>全月补发</h2>
+        <div class="panel ref">
+      <h3>全月补发</h3>
       <p>任意一个半月没拿到日薪，只要全月追上来，就按全月出勤天数补发。不分上半月还是下半月。</p>
       <div class="tbl"><table>
         <tr><th>全月钻石</th><th>全月出勤</th><th>结果</th></tr>
@@ -274,9 +328,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">只补不扣：全月应发低于已发金额时不补发，也不扣回。下半月收益和全月结算在次月15号一起算，全月合计最多按26天发。</p>
     </div>
-
-    <div class="panel ref">
-      <h2>奖金调整</h2>
+        <div class="panel ref">
+      <h3>奖金调整</h3>
       <div class="tbl"><table>
         <tr><th>项目</th><th>新制度</th></tr>
         <tr><td>辛苦奖</td><td><span class="pill keep">₱4,000</span><span class="pdesc">全月出勤满28天，不分钻石档位</span></td></tr>
@@ -287,9 +340,83 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>老主播加薪</td><td><span class="pill off">取消</span></td></tr>
       </table></div>
     </div>
-
-    <div class="panel ref">
-      <h2>申诉条件</h2>
+    </div>
+  </section>
+  <section class="cat cat-3">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">💎</span><div><h2 class="cat-title">佣金与发薪</h2><p class="cat-sub">20%佣金怎么算，钱什么时候到账</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>20%佣金怎么算</h3>
+      <p>20%佣金 = 钻石数 ÷ 100 × 50% × 20% × 美元兑比索汇率。本页计算器按固定汇率₱59估算，仅供参考，以后台实际到账金额为准。</p>
+      <div class="tbl"><table>
+        <tr><th>组成</th><th>怎么拿</th></tr>
+        <tr><td>主播自提 5%</td><td>直播结束后直接进你的TikTok账号余额</td></tr>
+        <tr><td>公司发放 15%</td><td>发薪日发放</td></tr>
+      </table></div>
+      <ul>
+        <li>底薪和佣金二选一：拿底薪就不发公司的15%佣金，TikTok自提的5%照常归你。</li>
+        <li>出勤不达标拿佣金时，公司发放的部分每半月最多₱10,000。</li>
+        <li>之后拿到补发时，要减去公司已发的佣金。</li>
+      </ul>
+    </div>
+        <div class="panel ref">
+      <h3>发薪日</h3>
+      <div class="tbl"><table>
+        <tr><th>结算内容</th><th>发放时间</th></tr>
+        <tr><td>1–15号的底薪（不含加薪）</td><td>当月月底</td></tr>
+        <tr><td>16号–月底的底薪、全月补发、加薪、所有奖金</td><td>次月15号</td></tr>
+        <tr><td>账单和罚款</td><td>每个发薪日都扣</td></tr>
+      </table></div>
+      <p class="note">公司押半个月收益。补发 = 全月应发 − 已发，只补不扣。账单和罚款在每个发薪日从当期收益里扣。</p>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-4">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">🎥</span><div><h2 class="cat-title">直播规范</h2><p class="cat-sub">准时开播、播满时长、加班和行为守则</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>扣减项：迟到、早退、中断直播</h3>
+      <p>每天直播6小时，时间必须固定，按排定的时间准时开播、播满6小时。每1分钟按₱3扣减。</p>
+      <div class="tbl"><table>
+        <tr><th>情况</th><th>怎么算</th></tr>
+        <tr><td>迟到：晚开播10分钟以内</td><td>不算迟到，不扣</td></tr>
+        <tr><td>迟到：晚开播超过10分钟</td><td>只扣超出10分钟的部分，每分钟₱3。例：晚开播15分钟，扣5 × ₱3 = ₱15</td></tr>
+        <tr><td>早退：提前下播30分钟以内</td><td>少播的每1分钟都扣，每分钟₱3，没有宽限。例：只播了5小时45分钟，扣15 × ₱3 = ₱45</td></tr>
+        <tr><td>早退：提前下播超过30分钟</td><td>算无效直播日，不计入出勤天数</td></tr>
+        <tr><td>中断直播：分两段播</td><td>算无效直播日，不计入出勤天数，除非有团队特别批准。例：早班4小时 + 晚班2小时、3小时 + 3小时</td></tr>
+      </table></div>
+      <ul>
+        <li>结算收益时，中断直播一律先按无效直播日算。有团队批准的，请拿批准证据找团队确认，重新结算。</li>
+        <li>因意外情况中断直播的，也算中断直播。请保留证据，按申诉流程申请。</li>
+      </ul>
+    </div>
+        <div class="panel ref">
+      <h3>加班（OT）</h3>
+      <p>想加班，要先向主播部门申请加班权限。批准后，在6小时之外再播满3小时，算一次加班，额外支付₱500。</p>
+      <div class="tbl"><table>
+        <tr><th>情况</th><th>怎么算</th></tr>
+        <tr><td>已批准，多播满3小时</td><td>算加班，额外₱500</td></tr>
+        <tr><td>已批准，多播不到3小时</td><td>不算加班，不额外支付</td></tr>
+        <tr><td>没有申请或没有批准</td><td>多播的时长不算加班</td></tr>
+      </table></div>
+      <p class="note">每天最多加班3小时，也就是每天最多₱500加班费。</p>
+    </div>
+        <div class="panel ref" id="code-of-conduct">
+      <div><span class="mr">Must read</span></div>
+      <h3>主播行为守则与红线政策</h3>
+      <p>共16条，包括直播与账号规范、粉丝管理、保密和离职交接。请每位主播都读一遍。</p>
+      <div class="doc-btns">
+        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" target="_blank" rel="noopener">在线查看</a>
+        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">下载 PDF</a>
+      </div>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-5">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">📝</span><div><h2 class="cat-title">申诉</h2><p class="cat-sub">遇到特殊情况，可以这样申请</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>申诉条件</h3>
       <p>出勤不满12天时，可以向所在团队的申诉负责人申诉，符合以下任意一条：</p>
       <ol>
         <li>身体不适、生病，需请长假休息</li>
@@ -305,9 +432,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>C3</td><td>Lyndell Seño</td></tr>
       </table></div>
     </div>
-
-    <div class="panel ref">
-      <h2>申诉要交的视频证据</h2>
+        <div class="panel ref">
+      <h3>申诉要交的视频证据</h3>
       <ol>
         <li>发烧：带脸拍体温计读数</li>
         <li>服用相关药品</li>
@@ -315,9 +441,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>事假：拍办事场景，并有证明人</li>
       </ol>
     </div>
-
-    <div class="panel ref">
-      <h2>申诉通过后怎么发</h2>
+        <div class="panel ref">
+      <h3>申诉通过后怎么发</h3>
       <p>新主播申诉成功，不看日均，按₱923/天。老主播用日均钻石对档，再乘以实际出勤天数。</p>
       <div class="tbl"><table>
         <tr><th>对应半月档</th><th class="r">日均钻石</th><th class="r">老主播日薪</th></tr>
@@ -328,81 +453,29 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">日均钻石 = 半月钻石 ÷ 实际出勤天数。日均标准线：80K档7K，150K档13K，300K档26K。剩余天数 = 本期天数 − 批准的请假天数，仍要出勤满80%。</p>
     </div>
-    <div class="panel ref">
-      <h2>20%佣金怎么算</h2>
-      <p>20%佣金 = 钻石数 ÷ 100 × 50% × 20% × 美元兑比索汇率。本页计算器按固定汇率₱59估算，仅供参考，以后台实际到账金额为准。</p>
-      <div class="tbl"><table>
-        <tr><th>组成</th><th>怎么拿</th></tr>
-        <tr><td>主播自提 5%</td><td>直播结束后直接进你的TikTok账号余额</td></tr>
-        <tr><td>公司发放 15%</td><td>发薪日发放</td></tr>
-      </table></div>
-      <ul>
-        <li>底薪和佣金二选一：拿底薪就不发公司的15%佣金，TikTok自提的5%照常归你。</li>
-        <li>出勤不达标拿佣金时，公司发放的部分每半月最多₱10,000。</li>
-        <li>之后拿到补发时，要减去公司已发的佣金。</li>
-      </ul>
-    </div>
-    <div class="panel ref">
-      <h2>扣减项：迟到、早退、中断直播</h2>
-      <p>每天直播6小时，时间必须固定，按排定的时间准时开播、播满6小时。每1分钟按₱3扣减。</p>
-      <div class="tbl"><table>
-        <tr><th>情况</th><th>怎么算</th></tr>
-        <tr><td>迟到：晚开播10分钟以内</td><td>不算迟到，不扣</td></tr>
-        <tr><td>迟到：晚开播超过10分钟</td><td>只扣超出10分钟的部分，每分钟₱3。例：晚开播15分钟，扣5 × ₱3 = ₱15</td></tr>
-        <tr><td>早退：提前下播30分钟以内</td><td>少播的每1分钟都扣，每分钟₱3，没有宽限。例：只播了5小时45分钟，扣15 × ₱3 = ₱45</td></tr>
-        <tr><td>早退：提前下播超过30分钟</td><td>算无效直播日，不计入出勤天数</td></tr>
-        <tr><td>中断直播：分两段播</td><td>算无效直播日，不计入出勤天数，除非有团队特别批准。例：早班4小时 + 晚班2小时、3小时 + 3小时</td></tr>
-      </table></div>
-      <ul>
-        <li>结算收益时，中断直播一律先按无效直播日算。有团队批准的，请拿批准证据找团队确认，重新结算。</li>
-        <li>因意外情况中断直播的，也算中断直播。请保留证据，按申诉流程申请。</li>
-      </ul>
-    </div>
-
-    <div class="panel ref">
-      <h2>加班（OT）</h2>
-      <p>想加班，要先向主播部门申请加班权限。批准后，在6小时之外再播满3小时，算一次加班，额外支付₱500。</p>
-      <div class="tbl"><table>
-        <tr><th>情况</th><th>怎么算</th></tr>
-        <tr><td>已批准，多播满3小时</td><td>算加班，额外₱500</td></tr>
-        <tr><td>已批准，多播不到3小时</td><td>不算加班，不额外支付</td></tr>
-        <tr><td>没有申请或没有批准</td><td>多播的时长不算加班</td></tr>
-      </table></div>
-      <p class="note">每天最多加班3小时，也就是每天最多₱500加班费。</p>
-    </div>
-
-    <div class="panel ref" id="code-of-conduct">
-      <div><span class="mr">Must read</span></div>
-      <h2>主播行为守则与红线政策</h2>
-      <p>共16条，包括直播与账号规范、粉丝管理、保密和离职交接。请每位主播都读一遍。</p>
-      <div class="doc-btns">
-        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" target="_blank" rel="noopener">在线查看</a>
-        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">下载 PDF</a>
-      </div>
-    </div>
-
-    <div class="panel ref">
-      <h2>新主播考核标准</h2>
-      <div class="tbl"><table>
-        <tr><th>阶段</th><th>通过标准</th><th>没通过</th></tr>
-        <tr><td>试用期（入职前7天）</td><td>日均2K/天，不看出勤</td><td>20%佣金</td></tr>
-        <tr><td>新主播（入职前15天，含试用期）</td><td>日均3K/天，出勤达到80%</td><td>这15天的钻石全部按20%佣金</td></tr>
-      </table></div>
-      <p class="note">通过试用只代表进入新主播期。前15天两项都达标，这15天（含试用期）全部按₱923/天结算，最多15天；第16天起按老主播标准。</p>
-      <p class="note">新主播第一次结算收益时，前15天一定已经播完（1–15号的收益在月底发，16号–月底的在次月15号发），所以直接按完整15天的日均和出勤结算，不会有补发。</p>
-    </div>
-
-    <div class="panel ref">
-      <h2>合同类型与转换</h2>
-      <p>半月低于80K的主播仍可拿₱755/天，这是给成长较慢的新主播、业绩暂时下滑的老主播留的缓冲。</p>
-      <ol>
-        <li><b>标准合同转佣金合同</b>：业绩长期不达标时，公司会通知主播从标准合同转为20%佣金合同。没有接到公司通知的，仍按本收益体系计算。</li>
-        <li><b>兼职主播合同</b>：出勤要求按签约时的约定。</li>
-        <li><b>特殊底薪合同</b>：出勤要求和标准合同一样，半个月要达到80%。</li>
-        <li><b>解约</b>：公司对解除合作非常谨慎，只有收益和出勤同时长期不达标，才会终止合作。</li>
-      </ol>
     </div>
   </section>
+  <section class="cat cat-6">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">🤝</span><div><h2 class="cat-title">合同类型</h2><p class="cat-sub">不同合同怎么算、什么时候转换</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>合同类型与转换</h3>
+      <p>半月低于80K仍可拿₱755/天，这是给成长慢、或业绩暂时下滑的主播留的缓冲。</p>
+      <div class="tbl"><table>
+        <tr><th>长期表现</th><th>结果</th></tr>
+        <tr><td>业绩不达标，出勤达标</td><td>公司通知你转为20%佣金合同</td></tr>
+        <tr><td>业绩和出勤都不达标</td><td>终止合作（公司对此非常谨慎）</td></tr>
+        <tr><td>没有收到公司通知</td><td>仍按本收益体系计算</td></tr>
+      </table></div>
+      <div class="tbl"><table>
+        <tr><th>其他合同</th><th>出勤要求</th></tr>
+        <tr><td>兼职主播合同</td><td>按签约时的约定</td></tr>
+        <tr><td>特殊底薪合同</td><td>和标准合同一样，半月80%</td></tr>
+      </table></div>
+    </div>
+    </div>
+  </section>
+  </div>
 </div>
 
 <script>

@@ -7,25 +7,26 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Barlow+Condensed:wght@500;600&family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
 <style>
 /* 布局思路：上方三选一的结算场景 → 左侧逐步选择、右侧结果卡 → 下方整张导图（与选择联动）→ 参考表 */
 :root{
-  --bg:#F3F5F8; --panel:#FFFFFF; --ink:#15202B; --muted:#5C6B7A; --line:#D5DCE4;
-  --accent:#2347D3; --accent-soft:#E6EBFC;
-  --day:#0E7A55; --day-soft:#DDF3EA;
-  --pct:#A85B00; --pct-soft:#FCEBD3;
-  --top:#6A2BC2; --top-soft:#EEE3FB;
-  --none:#56626E; --none-soft:#E7EBEF;
+  --bg:#FFF6FA; --panel:#FFFFFF; --ink:#3B2440; --muted:#86708C; --line:#F2DCE8;
+  --accent:#D63E8F; --accent-soft:#FDE6F2;
+  --day:#13895F; --day-soft:#E1F6EC;
+  --pct:#B85E06; --pct-soft:#FFF0DC;
+  --top:#7B3FD4; --top-soft:#F1E6FF;
+  --none:#7A6A80; --none-soft:#F2ECF3;
   --red:#C0362C; --red-soft:#FCE9E6;
   --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --font-num:"Barlow Condensed","Noto Sans SC","PingFang SC",sans-serif;
+  --font-display:"Baloo 2","ZCOOL KuaiLe","Noto Sans SC","PingFang SC",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
-    --accent:#8FA6FF; --accent-soft:#222E57;
+    --bg:#1B1320; --panel:#251A2C; --ink:#F5E9F2; --muted:#BBA5BF; --line:#3E2D46;
+    --accent:#FF8CC6; --accent-soft:#4A2140;
     --day:#5FD3A6; --day-soft:#153729;
     --pct:#F2B25C; --pct-soft:#3D2C12;
     --top:#C29BFF; --top-soft:#2F2148;
@@ -35,8 +36,8 @@
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --bg:#10161D; --panel:#19222C; --ink:#E8EDF2; --muted:#9AA8B6; --line:#2E3A47;
-  --accent:#8FA6FF; --accent-soft:#222E57;
+  --bg:#1B1320; --panel:#251A2C; --ink:#F5E9F2; --muted:#BBA5BF; --line:#3E2D46;
+  --accent:#FF8CC6; --accent-soft:#4A2140;
   --day:#5FD3A6; --day-soft:#153729;
   --pct:#F2B25C; --pct-soft:#3D2C12;
   --top:#C29BFF; --top-soft:#2F2148;
@@ -163,6 +164,55 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .days div b{font-family:var(--font-num);font-size:16px}
 .note{color:var(--muted);font-size:13px}
 
+/* ---- cute theme ---- */
+body{background-color:var(--bg);background-image:radial-gradient(var(--line) 1.2px,transparent 1.2px);background-size:22px 22px}
+h1{font-family:var(--font-display);font-size:34px;font-weight:800;letter-spacing:.01em}
+.panel{border-radius:20px;border:1.5px solid var(--line);box-shadow:0 6px 18px rgba(214,62,143,.07)}
+.panel h3{font-family:var(--font-display);font-size:19px;margin:0;font-weight:700}
+.tab{border-radius:18px;box-shadow:0 4px 12px rgba(214,62,143,.06)}
+.tab b{font-family:var(--font-display);font-size:18px}
+.opt{border-radius:14px}
+.step .n{background:var(--accent);color:#fff}
+.step .q{font-family:var(--font-display);font-size:17px}
+.reset{color:var(--accent)}
+.result{border-radius:22px}
+.raise{border-radius:12px}
+.effective{border:1.5px dashed var(--accent)}
+.mapsec h2{font-family:var(--font-display);font-size:20px}
+.cats{display:flex;flex-direction:column;gap:34px}
+.cat{--c:var(--accent);--c-soft:var(--accent-soft);display:flex;flex-direction:column;gap:14px}
+.cat-head{display:flex;align-items:center;gap:14px}
+.cat-ico{flex:none;width:52px;height:52px;border-radius:18px;background:var(--c-soft);display:grid;place-items:center;font-size:26px;transform:rotate(-6deg)}
+.cat-title{font-family:var(--font-display);font-size:26px;line-height:1.2;color:var(--c);font-weight:800}
+.cat-sub{color:var(--muted);font-size:14px}
+.cat .panel{border-top:6px solid var(--c)}
+.cat .panel h3{color:var(--ink)}
+.cat .refs{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.cat .refs{align-items:start}
+.cat-2 .refs{grid-template-columns:repeat(auto-fit,minmax(440px,1fr))}
+@media (max-width:520px){.cat .refs,.cat-2 .refs{grid-template-columns:1fr}}
+.cat-1{--c:#D63E8F;--c-soft:#FDE6F2}
+.cat-2{--c:#7B4DDB;--c-soft:#EFE7FF}
+.cat-3{--c:#0B8380;--c-soft:#DDF6F4}
+.cat-4{--c:#C2630A;--c-soft:#FFEEDB}
+.cat-5{--c:#2F6FE0;--c-soft:#E3EEFF}
+.cat-6{--c:#8F6A00;--c-soft:#FFF4CC}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .cat-1{--c:#FF8CC6;--c-soft:#4A2140}
+  :root:not([data-theme="light"]) .cat-2{--c:#B99BFF;--c-soft:#33264F}
+  :root:not([data-theme="light"]) .cat-3{--c:#5FD9D4;--c-soft:#173B3B}
+  :root:not([data-theme="light"]) .cat-4{--c:#FFB066;--c-soft:#46301A}
+  :root:not([data-theme="light"]) .cat-5{--c:#8DB4FF;--c-soft:#1E2E4F}
+  :root:not([data-theme="light"]) .cat-6{--c:#F2CF5B;--c-soft:#3F3517}
+}
+:root[data-theme="dark"] .cat-1{--c:#FF8CC6;--c-soft:#4A2140}
+:root[data-theme="dark"] .cat-2{--c:#B99BFF;--c-soft:#33264F}
+:root[data-theme="dark"] .cat-3{--c:#5FD9D4;--c-soft:#173B3B}
+:root[data-theme="dark"] .cat-4{--c:#FFB066;--c-soft:#46301A}
+:root[data-theme="dark"] .cat-5{--c:#8DB4FF;--c-soft:#1E2E4F}
+:root[data-theme="dark"] .cat-6{--c:#F2CF5B;--c-soft:#3F3517}
+.cat .tbl + .tbl{margin-top:4px}
+
 .brand{display:flex;align-items:center;gap:14px;background:#000;border-radius:12px;padding:10px 18px 10px 12px;position:relative;overflow:hidden}
 .brand::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#F04FD0,#8B5CF6 50%,#22D3EE)}
 .brand img{width:52px;height:52px;flex:none;border-radius:50%}
@@ -214,28 +264,34 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     <div class="mapbox" id="map"></div>
   </details>
 
-  <section class="refs">
-    <div class="panel ref">
-      <h2>Paydays</h2>
-      <div class="tbl"><table>
-        <tr><th>What is paid</th><th>When</th></tr>
-        <tr><td>Base pay for the 1st–15th (no raise)</td><td>End of the same month</td></tr>
-        <tr><td>Base pay for the 16th–month end, back pay, raise, all bonuses</td><td>15th of the next month</td></tr>
-        <tr><td>Bills and deductions</td><td>Taken on every payday</td></tr>
-      </table></div>
-      <p class="note">Pay is held for half a month. Back pay = full-month pay due − amount already paid, and it only tops up. Bills and deductions are taken from the pay on each payday.</p>
-    </div>
-
-    <div class="panel ref">
-      <h2>Attendance standard: 80%</h2>
+  <div class="cats">
+  <section class="cat cat-1">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">📅</span><div><h2 class="cat-title">Attendance &amp; new hosts</h2><p class="cat-sub">What counts as attendance and how new hosts are assessed</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>Attendance standard: 80%</h3>
       <p>Hosts who work the whole period need <b>12 days</b> per half-month and <b>24 days</b> per month.</p>
       <p>Hosts who join mid-period need 80% of their days on board (start day included), rounded to the nearest day. Example: start on the 10th, 6 days on board by the 15th, 5 days required.</p>
       <div class="days" id="dayGrid"></div>
       <p class="note">Left: days on board. Right, in bold: days required.</p>
     </div>
-
-    <div class="panel ref">
-      <h2>Base pay cap: 26 days a month</h2>
+        <div class="panel ref">
+      <h3>New host assessment</h3>
+      <div class="tbl"><table>
+        <tr><th>Stage</th><th>To pass</th><th>If not passed</th></tr>
+        <tr><td>Trial (first 7 days)</td><td>2K/day average, attendance not checked</td><td>20% commission</td></tr>
+        <tr><td>New host (first 15 days, trial included)</td><td>3K/day average and 80% attendance</td><td>All diamonds from those 15 days at 20% commission</td></tr>
+      </table></div>
+      <p class="note">Passing the trial only starts the new host period. If both 15-day targets are met, all 15 days (trial included) are paid at ₱923/day, 15 days at most. From day 16 the regular host standard applies.</p>
+      <p class="note">By a new host's first payday, the first 15 days are always complete (pay for the 1st–15th comes at month end, and for the 16th–month end on the 15th of the next month). So it is settled on the full 15-day average and attendance, with nothing to top up later.</p>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-2">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">💰</span><div><h2 class="cat-title">Base pay, raises &amp; bonuses</h2><p class="cat-sub">Daily rates, caps and when raises kick in</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>Base pay cap: 26 days a month</h3>
       <p>Once attendance is met, each half-month pays every day streamed. The full month pays at most 26 days, so the cap is the monthly base = daily rate × 26 days. From 300K in the month, the raise ladder monthly base is the cap.</p>
       <div class="tbl"><table>
         <tr><th>Half-month diamonds</th><th>Host</th><th class="r">Rate</th><th class="r">Monthly cap</th></tr>
@@ -246,9 +302,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">The first 7 days are the trial. A host is new through day 15 and regular after day 15. The trial and new host period are assessed together over the first 15 days, see New host assessment below. New hosts who reach 150K or 300K diamonds in a half-month get the matching tier above when it pays more. ₱13,000+ means ₱13,000 is guaranteed regardless of attendance, and each day beyond 13 adds ₱1,000, within the 26-day monthly cap. The new host period lasts at most 15 days. From day 16 the regular host standard applies.</p>
     </div>
-
-    <div class="panel ref">
-      <h2>Raise ladder</h2>
+        <div class="panel ref ladder">
+      <h3>Raise ladder</h3>
       <div class="tbl"><table>
         <tr><th>Full-month diamonds</th><th class="r">Monthly base (cap)</th><th class="r">Daily rate</th><th class="r">Bonus</th><th>Attendance</th></tr>
         <tr><td>300K–500K</td><td class="r">₱26,000</td><td class="r">₱1,000</td><td class="r">–</td><td>24 days</td></tr>
@@ -260,9 +315,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">Tiers use total diamonds for the full month. Daily rate = monthly base ÷ 26 days. Below 600K the month needs 24 days of attendance and pays days streamed × daily rate. From 600K attendance is not required and the full monthly base is paid. The monthly base is also the cap: the month pays at most 26 days. Each half-month is first paid at ₱1,000/day and the difference is settled after the month ends. The bonus is paid on the 15th.</p>
     </div>
-
-    <div class="panel ref">
-      <h2>Full-month back pay</h2>
+        <div class="panel ref">
+      <h3>Full-month back pay</h3>
       <p>If a host missed the daily rate in either half-month but catches up over the full month, the whole month is paid at the daily rate. It does not matter which half was missed.</p>
       <div class="tbl"><table>
         <tr><th>Month diamonds</th><th>Month attendance</th><th>Result</th></tr>
@@ -274,9 +328,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">Top-up only: if month pay due is below what was already paid, there is no back pay and nothing is deducted. Second-half pay and the monthly settlement are worked out together on the 15th of the next month, and the month pays at most 26 days in total.</p>
     </div>
-
-    <div class="panel ref">
-      <h2>Bonus changes</h2>
+        <div class="panel ref">
+      <h3>Bonus changes</h3>
       <div class="tbl"><table>
         <tr><th>Item</th><th>New policy</th></tr>
         <tr><td>Hard work bonus</td><td><span class="pill keep">₱4,000</span><span class="pdesc">28 days of attendance in the month, at any diamond level</span></td></tr>
@@ -287,9 +340,83 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>Seniority raise</td><td><span class="pill off">Removed</span></td></tr>
       </table></div>
     </div>
-
-    <div class="panel ref">
-      <h2>Grounds for appeal</h2>
+    </div>
+  </section>
+  <section class="cat cat-3">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">💎</span><div><h2 class="cat-title">Commission &amp; paydays</h2><p class="cat-sub">How the 20% works and when money arrives</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>How the 20% commission works</h3>
+      <p>20% commission = diamonds ÷ 100 × 50% × 20% × the USD to PHP rate. The calculator on this page uses a fixed rate of ₱59 as an estimate. It is for reference only, and the amount actually credited in the backend prevails.</p>
+      <div class="tbl"><table>
+        <tr><th>Part</th><th>How it is paid</th></tr>
+        <tr><td>5% self-withdrawal</td><td>Goes straight to your TikTok balance after each stream</td></tr>
+        <tr><td>15% paid by the company</td><td>Paid on payday</td></tr>
+      </table></div>
+      <ul>
+        <li>Base pay and commission are either-or: with base pay the company's 15% is not paid, and the 5% TikTok withdrawal is still yours.</li>
+        <li>When attendance is not met, the company-paid part is capped at ₱10,000 per half-month.</li>
+        <li>Any later back pay is reduced by commission the company already paid.</li>
+      </ul>
+    </div>
+        <div class="panel ref">
+      <h3>Paydays</h3>
+      <div class="tbl"><table>
+        <tr><th>What is paid</th><th>When</th></tr>
+        <tr><td>Base pay for the 1st–15th (no raise)</td><td>End of the same month</td></tr>
+        <tr><td>Base pay for the 16th–month end, back pay, raise, all bonuses</td><td>15th of the next month</td></tr>
+        <tr><td>Bills and deductions</td><td>Taken on every payday</td></tr>
+      </table></div>
+      <p class="note">Pay is held for half a month. Back pay = full-month pay due − amount already paid, and it only tops up. Bills and deductions are taken from the pay on each payday.</p>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-4">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">🎥</span><div><h2 class="cat-title">LIVE rules</h2><p class="cat-sub">Start on time, stream the full LIVE, overtime and the code of conduct</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>Deductions: late start, early end, split streams</h3>
+      <p>Each LIVE is 6 hours at a fixed time: start on time and stream the full 6 hours. Each minute is ₱3.</p>
+      <div class="tbl"><table>
+        <tr><th>Situation</th><th>What happens</th></tr>
+        <tr><td>Late: up to 10 minutes after the start time</td><td>Not counted as late, no deduction</td></tr>
+        <tr><td>Late: more than 10 minutes after the start time</td><td>Only the minutes beyond 10 are deducted, at ₱3 each. Example: 15 minutes late, 5 × ₱3 = ₱15</td></tr>
+        <tr><td>Early end: up to 30 minutes short</td><td>Every minute short is deducted at ₱3, with no grace period. Example: 5 h 45 min streamed, 15 × ₱3 = ₱45</td></tr>
+        <tr><td>Early end: more than 30 minutes short</td><td>Counted as an invalid LIVE day, not counted toward attendance</td></tr>
+        <tr><td>Split stream: streaming in two parts</td><td>Counted as an invalid LIVE day, not counted toward attendance, unless the team specially approved it. Example: 4 h morning + 2 h evening, or 3 h + 3 h</td></tr>
+      </table></div>
+      <ul>
+        <li>At payroll, split streams are first counted as invalid LIVE days. If the team approved yours, bring the approval to the team to have it settled again.</li>
+        <li>A stream cut off by an unexpected event also counts as a split stream. Keep your proof and apply through the appeal process.</li>
+      </ul>
+    </div>
+        <div class="panel ref">
+      <h3>Overtime (OT)</h3>
+      <p>To work overtime, first ask the Host department for OT permission. Once approved, streaming a full 3 hours beyond the 6-hour LIVE counts as one OT and pays an extra ₱500.</p>
+      <div class="tbl"><table>
+        <tr><th>Situation</th><th>What happens</th></tr>
+        <tr><td>Approved, 3 full extra hours</td><td>Counts as OT, extra ₱500</td></tr>
+        <tr><td>Approved, under 3 extra hours</td><td>Not OT, no extra pay</td></tr>
+        <tr><td>Not requested or not approved</td><td>Extra time does not count as OT</td></tr>
+      </table></div>
+      <p class="note">OT is limited to 3 hours a day, so at most ₱500 OT pay a day.</p>
+    </div>
+        <div class="panel ref" id="code-of-conduct">
+      <div><span class="mr">Must read</span></div>
+      <h3>Streamer Code of Conduct &amp; Red-Line Policies</h3>
+      <p>16 rules covering streaming and accounts, supporters, confidentiality, and leaving the team. Every streamer should read it.</p>
+      <div class="doc-btns">
+        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" target="_blank" rel="noopener">View online</a>
+        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">Download PDF</a>
+      </div>
+    </div>
+    </div>
+  </section>
+  <section class="cat cat-5">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">📝</span><div><h2 class="cat-title">Appeals</h2><p class="cat-sub">What to do if something special happens</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>Grounds for appeal</h3>
       <p>A host with fewer than 12 days can appeal to their team's appeal contact on any of these grounds:</p>
       <ol>
         <li>Illness that needs a long leave to rest</li>
@@ -305,9 +432,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <tr><td>C3</td><td>Lyndell Seño</td></tr>
       </table></div>
     </div>
-
-    <div class="panel ref">
-      <h2>Video proof for an appeal</h2>
+        <div class="panel ref">
+      <h3>Video proof for an appeal</h3>
       <ol>
         <li>Fever: film the thermometer reading with your face in the shot</li>
         <li>Film yourself taking the related medicine</li>
@@ -315,9 +441,8 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>Personal matters: film the situation and name a witness</li>
       </ol>
     </div>
-
-    <div class="panel ref">
-      <h2>Pay after an approved appeal</h2>
+        <div class="panel ref">
+      <h3>Pay after an approved appeal</h3>
       <p>New hosts get ₱923/day, with no daily-average check. Regular hosts are matched to a tier by daily average diamonds, then paid for the days actually streamed.</p>
       <div class="tbl"><table>
         <tr><th>Matching tier</th><th class="r">Daily average</th><th class="r">Regular host rate</th></tr>
@@ -328,81 +453,29 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
       </table></div>
       <p class="note">Daily average = half-month diamonds ÷ days actually streamed. Daily average lines: 7K for the 80K tier, 13K for the 150K tier, 26K for the 300K tier. Remaining days = days in the period − approved leave days, and 80% of them must still be streamed.</p>
     </div>
-    <div class="panel ref">
-      <h2>How the 20% commission works</h2>
-      <p>20% commission = diamonds ÷ 100 × 50% × 20% × the USD to PHP rate. The calculator on this page uses a fixed rate of ₱59 as an estimate. It is for reference only, and the amount actually credited in the backend prevails.</p>
-      <div class="tbl"><table>
-        <tr><th>Part</th><th>How it is paid</th></tr>
-        <tr><td>5% self-withdrawal</td><td>Goes straight to your TikTok balance after each stream</td></tr>
-        <tr><td>15% paid by the company</td><td>Paid on payday</td></tr>
-      </table></div>
-      <ul>
-        <li>Base pay and commission are either-or: with base pay the company's 15% is not paid, and the 5% TikTok withdrawal is still yours.</li>
-        <li>When attendance is not met, the company-paid part is capped at ₱10,000 per half-month.</li>
-        <li>Any later back pay is reduced by commission the company already paid.</li>
-      </ul>
-    </div>
-    <div class="panel ref">
-      <h2>Deductions: late start, early end, split streams</h2>
-      <p>Each LIVE is 6 hours at a fixed time: start on time and stream the full 6 hours. Each minute is ₱3.</p>
-      <div class="tbl"><table>
-        <tr><th>Situation</th><th>What happens</th></tr>
-        <tr><td>Late: up to 10 minutes after the start time</td><td>Not counted as late, no deduction</td></tr>
-        <tr><td>Late: more than 10 minutes after the start time</td><td>Only the minutes beyond 10 are deducted, at ₱3 each. Example: 15 minutes late, 5 × ₱3 = ₱15</td></tr>
-        <tr><td>Early end: up to 30 minutes short</td><td>Every minute short is deducted at ₱3, with no grace period. Example: 5 h 45 min streamed, 15 × ₱3 = ₱45</td></tr>
-        <tr><td>Early end: more than 30 minutes short</td><td>Counted as an invalid LIVE day, not counted toward attendance</td></tr>
-        <tr><td>Split stream: streaming in two parts</td><td>Counted as an invalid LIVE day, not counted toward attendance, unless the team specially approved it. Example: 4 h morning + 2 h evening, or 3 h + 3 h</td></tr>
-      </table></div>
-      <ul>
-        <li>At payroll, split streams are first counted as invalid LIVE days. If the team approved yours, bring the approval to the team to have it settled again.</li>
-        <li>A stream cut off by an unexpected event also counts as a split stream. Keep your proof and apply through the appeal process.</li>
-      </ul>
-    </div>
-
-    <div class="panel ref">
-      <h2>Overtime (OT)</h2>
-      <p>To work overtime, first ask the Host department for OT permission. Once approved, streaming a full 3 hours beyond the 6-hour LIVE counts as one OT and pays an extra ₱500.</p>
-      <div class="tbl"><table>
-        <tr><th>Situation</th><th>What happens</th></tr>
-        <tr><td>Approved, 3 full extra hours</td><td>Counts as OT, extra ₱500</td></tr>
-        <tr><td>Approved, under 3 extra hours</td><td>Not OT, no extra pay</td></tr>
-        <tr><td>Not requested or not approved</td><td>Extra time does not count as OT</td></tr>
-      </table></div>
-      <p class="note">OT is limited to 3 hours a day, so at most ₱500 OT pay a day.</p>
-    </div>
-
-    <div class="panel ref" id="code-of-conduct">
-      <div><span class="mr">Must read</span></div>
-      <h2>Streamer Code of Conduct &amp; Red-Line Policies</h2>
-      <p>16 rules covering streaming and accounts, supporters, confidentiality, and leaving the team. Every streamer should read it.</p>
-      <div class="doc-btns">
-        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" target="_blank" rel="noopener">View online</a>
-        <a class="doc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">Download PDF</a>
-      </div>
-    </div>
-
-    <div class="panel ref">
-      <h2>New host assessment</h2>
-      <div class="tbl"><table>
-        <tr><th>Stage</th><th>To pass</th><th>If not passed</th></tr>
-        <tr><td>Trial (first 7 days)</td><td>2K/day average, attendance not checked</td><td>20% commission</td></tr>
-        <tr><td>New host (first 15 days, trial included)</td><td>3K/day average and 80% attendance</td><td>All diamonds from those 15 days at 20% commission</td></tr>
-      </table></div>
-      <p class="note">Passing the trial only starts the new host period. If both 15-day targets are met, all 15 days (trial included) are paid at ₱923/day, 15 days at most. From day 16 the regular host standard applies.</p>
-      <p class="note">By a new host's first payday, the first 15 days are always complete (pay for the 1st–15th comes at month end, and for the 16th–month end on the 15th of the next month). So it is settled on the full 15-day average and attendance, with nothing to top up later.</p>
-    </div>
-
-    <div class="panel ref">
-      <h2>Contract types and changes</h2>
-      <p>Hosts below 80K a half-month can still get ₱755/day. This is a buffer for new hosts who grow slowly and regular hosts whose results drop for a while.</p>
-      <ol>
-        <li><b>Standard to commission</b>: if results stay below target for a long time, the company will notify the host that the contract changes from standard to a 20% commission contract. Until you get that notice, this earnings system still applies to you.</li>
-        <li><b>Part-time contracts</b>: attendance requirements follow what was agreed when the contract was signed.</li>
-        <li><b>Special base pay contracts</b>: the same attendance requirement as standard contracts, 80% per half-month.</li>
-        <li><b>Ending the partnership</b>: the company is very careful about this. It happens only when both earnings and attendance stay below target for a long time.</li>
-      </ol>
     </div>
   </section>
+  <section class="cat cat-6">
+    <div class="cat-head"><span class="cat-ico" aria-hidden="true">🤝</span><div><h2 class="cat-title">Contract types</h2><p class="cat-sub">How each contract works and when it changes</p></div></div>
+    <div class="refs">
+        <div class="panel ref">
+      <h3>Contract types and changes</h3>
+      <p>Hosts below 80K a half-month can still get ₱755/day. It is a buffer for hosts who grow slowly or have a temporary dip.</p>
+      <div class="tbl"><table>
+        <tr><th>Over a long period</th><th>What happens</th></tr>
+        <tr><td>Results below target, attendance met</td><td>The company notifies you of a change to a 20% commission contract</td></tr>
+        <tr><td>Both results and attendance below target</td><td>The partnership ends (the company is very careful about this)</td></tr>
+        <tr><td>No notice from the company</td><td>This earnings system still applies</td></tr>
+      </table></div>
+      <div class="tbl"><table>
+        <tr><th>Other contracts</th><th>Attendance</th></tr>
+        <tr><td>Part-time</td><td>As agreed when signing</td></tr>
+        <tr><td>Special base pay</td><td>Same as standard, 80% per half-month</td></tr>
+      </table></div>
+    </div>
+    </div>
+  </section>
+  </div>
 </div>
 
 <script>

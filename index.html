@@ -289,7 +289,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 
     <div class="panel ref">
       <h2>Grounds for appeal</h2>
-      <p>A host with fewer than 12 days can appeal to Haru on any of these grounds:</p>
+      <p>A host with fewer than 12 days can appeal to their team's appeal contact on any of these grounds:</p>
       <ol>
         <li>Illness that needs a long leave to rest</li>
         <li>A family emergency that needs a long leave</li>
@@ -298,6 +298,11 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>Other situations that need a specific explanation</li>
       </ol>
       <p class="note">Limit: all 5 grounds together allow one appeal every three months. They cannot be combined, and further requests are not approved.</p>
+      <div class="tbl"><table>
+        <tr><th>Team</th><th>Appeal contact</th></tr>
+        <tr><td>C1</td><td>Haru</td></tr>
+        <tr><td>C3</td><td>Lyndell Seño</td></tr>
+      </table></div>
     </div>
 
     <div class="panel ref">
@@ -452,7 +457,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"Appeal", desc:"For hosts on 20% commission with a special situation", root:"Appeal",
-    tree:{q:"Was the appeal approved?", hint:"Haru reviews it. The grounds must apply and video proof is required. All appeals together are limited to once every three months.", opts:[
+    tree:{q:"Was the appeal approved?", hint:"Your team's appeal contact reviews it (C1: Haru, C3: Lyndell Seño). The grounds must apply and video proof is required. All appeals together are limited to once every three months.", opts:[
       {l:"Approved", next:{q:"Did the host stream 80% of the remaining days?", hint:"Remaining days = days in the period − approved leave days. Example: 5 days of leave leaves 10 days, so 8 days are required.", opts:[
         {l:"80% or more", next:{q:"New host or regular host?", opts:[
           {l:"New host", s:"Up to and including day 15", next:R.aNew},

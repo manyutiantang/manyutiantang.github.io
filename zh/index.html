@@ -289,7 +289,7 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 
     <div class="panel ref">
       <h2>申诉条件</h2>
-      <p>出勤不满12天时可以向 Haru 申诉，符合以下任意一条：</p>
+      <p>出勤不满12天时，可以向所在团队的申诉负责人申诉，符合以下任意一条：</p>
       <ol>
         <li>身体不适、生病，需请长假休息</li>
         <li>家里有急事，需要请长假处理</li>
@@ -298,6 +298,11 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
         <li>其他需特别说明的情况</li>
       </ol>
       <p class="note">次数限制：以上5条合计，每三个月只有一次申诉机会，不能叠加，超出不批准。</p>
+      <div class="tbl"><table>
+        <tr><th>团队</th><th>申诉负责人</th></tr>
+        <tr><td>C1</td><td>Haru</td></tr>
+        <tr><td>C3</td><td>Lyndell Seño</td></tr>
+      </table></div>
     </div>
 
     <div class="panel ref">
@@ -452,7 +457,7 @@ const TREES = {
     ]},
     start:[3,0]},
   appeal:{name:"申诉", desc:"拿20%佣金、有特殊情况的主播可以申请", root:"申诉",
-    tree:{q:"申诉通过了吗？", hint:"由 Haru 审核。需符合申诉条件，并提交视频证据。所有申诉合计每三个月只有一次机会。", opts:[
+    tree:{q:"申诉通过了吗？", hint:"由所在团队的申诉负责人审核（C1：Haru，C3：Lyndell Seño）。需符合申诉条件，并提交视频证据。所有申诉合计每三个月只有一次机会。", opts:[
       {l:"通过", next:{q:"剩余天数里出勤满80%吗？", hint:"剩余天数 = 本期天数 − 批准的请假天数。例：请假5天，剩10天，需出勤8天。", opts:[
         {l:"满80%", next:{q:"新主播还是老主播？", opts:[
           {l:"新主播", s:"入职15天内，含第15天", next:R.aNew},

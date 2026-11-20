@@ -17,6 +17,7 @@
   --pct:#A85B00; --pct-soft:#FCEBD3;
   --top:#6A2BC2; --top-soft:#EEE3FB;
   --none:#56626E; --none-soft:#E7EBEF;
+  --red:#C0362C; --red-soft:#FCE9E6;
   --font-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --font-num:"Barlow Condensed","Noto Sans SC","PingFang SC",sans-serif;
 }
@@ -29,6 +30,7 @@
     --pct:#F2B25C; --pct-soft:#3D2C12;
     --top:#C29BFF; --top-soft:#2F2148;
     --none:#A9B4BF; --none-soft:#27313B;
+    --red:#FF8A7E; --red-soft:#3A1D1A;
   }
 }
 :root[data-theme="dark"]{
@@ -39,6 +41,7 @@
   --pct:#F2B25C; --pct-soft:#3D2C12;
   --top:#C29BFF; --top-soft:#2F2148;
   --none:#A9B4BF; --none-soft:#27313B;
+    --red:#FF8A7E; --red-soft:#3A1D1A;
 }
 *{box-sizing:border-box}
 html,body{margin:0}
@@ -50,6 +53,15 @@ p{margin:0}
 .lede{color:var(--muted);max-width:46em;margin-top:6px}
 .effective{display:inline-block;margin-top:10px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 14px;font-size:14px;font-weight:700}
 
+.coc{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--red-soft);border:2px solid var(--red);border-radius:12px;padding:14px 16px}
+.coc-ico{flex:none;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
+.coc-txt{flex:1 1 320px;display:flex;flex-direction:column;gap:2px}
+.coc-txt b{font-size:17px;color:var(--red)}
+.coc-txt span{font-size:14px;color:var(--ink)}
+.coc-btns{display:flex;gap:8px;flex-wrap:wrap}
+.coc-btn{display:inline-block;padding:9px 16px;border-radius:8px;border:1.5px solid var(--red);color:var(--red);background:var(--panel);text-decoration:none;font-weight:700;font-size:14px}
+.coc-btn.solid{background:var(--red);color:#fff}
+.coc-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .tabs{display:flex;flex-wrap:wrap;gap:10px}
 .tab{flex:1 1 220px;text-align:left;background:var(--panel);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;color:var(--ink);font:inherit}
 .tab b{display:block;font-size:16px}
@@ -171,6 +183,18 @@ td.r,th.r{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
     <p class="effective">本薪资体系自 2026年11月16日 起生效</p></div>
     <nav class="lang" aria-label="语言"><a href="../" lang="en">English</a><span aria-current="page">中文</span></nav>
   </header>
+
+  <aside class="coc" aria-label="主播行为守则">
+    <span class="coc-ico" aria-hidden="true">!</span>
+    <div class="coc-txt">
+      <b>必读：主播行为守则与红线政策</b>
+      <span>违反任意一条，当期只按20%佣金结算，严重的直接解约。请每位主播认真阅读。</span>
+    </div>
+    <div class="coc-btns">
+      <a class="coc-btn" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" target="_blank" rel="noopener">在线查看</a>
+      <a class="coc-btn solid" href="https://manyutiantang.github.io/docs/Avery-Media-Streamer-Code-of-Conduct.pdf" download="Avery-Media-Streamer-Code-of-Conduct.pdf">下载 PDF</a>
+    </div>
+  </aside>
 
   <div class="tabs" role="tablist" id="tabs"></div>
 
